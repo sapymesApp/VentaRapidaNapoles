@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             NavigationPage.HasNavigationBar="False"
+             xmlns:controls="clr-namespace:MauiApp6.Controls"
+             x:Class="MauiApp6.DetalleVentasPage">
+
+    <Grid RowDefinitions="Auto, *, Auto" BackgroundColor="#F3F4F6">
+
+        <Border Grid.Row="0" BackgroundColor="#0284C7" StrokeThickness="0" Padding="20,25,20,45" Margin="0,0,0,-25" ZIndex="0">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="0,0,25,25" />
+            </Border.StrokeShape>
+
+            <Grid ColumnDefinitions="*, Auto" VerticalOptions="Start">
+                <VerticalStackLayout Spacing="2">
+                    <HorizontalStackLayout Spacing="8">
+                        <Label Text="&#xe873;" FontFamily="MaterialIcons" TextColor="#BAE6FD" FontSize="20" VerticalOptions="Center"/>
+                        <Label x:Name="LblFolio" TextColor="White" FontSize="22" FontAttributes="Bold" VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+
+                    <Label x:Name="LblCliente" TextColor="White" FontSize="16" FontAttributes="Bold" Margin="0,4,0,0"/>
+                    <Label x:Name="LblFecha" TextColor="#E0F2FE" FontSize="13" />
+                </VerticalStackLayout>
+
+                <Border Grid.Column="1" BackgroundColor="White" StrokeThickness="0" Padding="12,6" VerticalOptions="Start" Margin="0,5,0,0">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="12" />
+                    </Border.StrokeShape>
+                    <Label x:Name="LblStatus" TextColor="#0284C7" FontSize="12" FontAttributes="Bold" HorizontalOptions="Center"/>
+                </Border>
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="1" BackgroundColor="White" StrokeThickness="0" Margin="15,0,15,15" ZIndex="1">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="15" />
+            </Border.StrokeShape>
+            <Border.Shadow>
+                <Shadow Brush="Black" Offset="0,4" Radius="10" Opacity="0.08" />
+            </Border.Shadow>
+
+            <CollectionView x:Name="CvDetalles" Margin="0">
+
+                <CollectionView.Header>
+                    <VerticalStackLayout>
+                        <Grid ColumnDefinitions="*, 50, 70, 85" Padding="15,15,15,10" BackgroundColor="#F9FAFB">
+                            <Label Text="PRODUCTO" FontSize="11" FontAttributes="Bold" TextColor="#9CA3AF" />
+                            <Label Grid.Column="1" Text="CANT." FontSize="11" FontAttributes="Bold" TextColor="#9CA3AF" HorizontalTextAlignment="Center"/>
+                            <Label Grid.Column="2" Text="PRECIO" FontSize="11" FontAttributes="Bold" TextColor="#9CA3AF" HorizontalTextAlignment="End"/>
+                            <Label Grid.Column="3" Text="SUBTOTAL" FontSize="11" FontAttributes="Bold" TextColor="#9CA3AF" HorizontalTextAlignment="End"/>
+                        </Grid>
+                        <BoxView HeightRequest="1" Color="#E5E7EB" />
+                    </VerticalStackLayout>
+                </CollectionView.Header>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <VerticalStackLayout>
+                            <Grid ColumnDefinitions="*, 50, 70, 85" Padding="15,12" BackgroundColor="White">
+                                <Label Text="{Binding Descripcion}" VerticalOptions="Center" FontSize="14" TextColor="#111827" LineBreakMode="TailTruncation"/>
+                                <Label Grid.Column="1" Text="{Binding Cantidad}" HorizontalTextAlignment="Center" VerticalOptions="Center" TextColor="#6B7280"/>
+                                <Label Grid.Column="2" Text="{Binding Precio, StringFormat='{0:C}'}" HorizontalTextAlignment="End" VerticalOptions="Center" TextColor="#4B5563"/>
+                                <Label Grid.Column="3" Text="{Binding ImporteTotal, StringFormat='{0:C}'}" HorizontalTextAlignment="End" VerticalOptions="Center" FontAttributes="Bold" TextColor="#111827"/>
+                            </Grid>
+                            <BoxView HeightRequest="1" Color="#F3F4F6" Margin="15,0" />
+                        </VerticalStackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+
+            </CollectionView>
+        </Border>
+
+        <Border Grid.Row="2" BackgroundColor="White" StrokeThickness="0" Padding="20,20,20,30" ZIndex="2">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="25,25,0,0" />
+            </Border.StrokeShape>
+            <Border.Shadow>
+                <Shadow Brush="Black" Offset="0,-4" Opacity="0.05" Radius="10" />
+            </Border.Shadow>
+
+            <VerticalStackLayout Spacing="15">
+
+                <Grid ColumnDefinitions="*, Auto">
+                    <VerticalStackLayout VerticalOptions="Center">
+                        <Label Text="TOTAL NETO" FontSize="13" TextColor="#6B7280" FontAttributes="Bold" />
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="0">
+                        <Label x:Name="LblGranTotal" Text="$0.00" FontSize="30" FontAttributes="Bold" TextColor="#0284C7" HorizontalOptions="End" />
+                        <Label x:Name="LblSaldo" Text="" FontSize="15" FontAttributes="Bold" TextColor="#EF4444" HorizontalOptions="End" />
+                    </VerticalStackLayout>
+                </Grid>
+
+                <BoxView HeightRequest="1" Color="#E5E7EB" Margin="0,5" />
+
+                <VerticalStackLayout Spacing="12">
+
+                    <Button x:Name="BtnActualizar"
+                        Text="Generar PDF actualizado"
+                        BackgroundColor="#F59E0B" 
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        CornerRadius="10"
+                        HeightRequest="48"
+                        IsVisible="False"
+                        Clicked="OnActualizarClicked">
+                        <Button.Shadow>
+                            <Shadow Brush="#F59E0B" Offset="0,4" Radius="8" Opacity="0.3" />
+                        </Button.Shadow>
+                    </Button>
+
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                        <controls:MenuButton 
+                        Grid.Column="0"
+                        x:Name="BtnAbonar"
+                        ButtonText="Realizar abono" 
+                        CardBackgroundColor="#F0F9FF" 
+                        PrimaryColor="#0284C7" 
+                        IconGlyph="&#xf2c0;" 
+                        Tapped="OnAbonarClicked" />
+
+                        <controls:MenuButton 
+                        Grid.Column="1"
+                        x:Name="btnReimprimir"
+                        ButtonText="Reimprimir" 
+                        CardBackgroundColor="#F3F4F6" 
+                        PrimaryColor="#4B5563" 
+                        IconGlyph="&#xe8ad;" 
+                        Tapped="btnReimprimir_Tapped" />
+                    </Grid>
+
+                    <Button x:Name="BtnImprimir"
+                        Text="Compartir PDF"
+                        BackgroundColor="#10B981"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        CornerRadius="10"
+                        HeightRequest="48"
+                        IsVisible="False" 
+                        Clicked="OnImprimirClicked">
+                        <Button.Shadow>
+                            <Shadow Brush="#10B981" Offset="0,4" Radius="8" Opacity="0.3" />
+                        </Button.Shadow>
+                        <Button.ImageSource>
+                            <FontImageSource FontFamily="MaterialIcons" Glyph="&#xe80df;" Color="White" />
+                        </Button.ImageSource>
+                    </Button>
+
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+        </Border>
+
+    </Grid>
+
+</ContentPage>

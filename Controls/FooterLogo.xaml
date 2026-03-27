@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MauiApp6.Controls.FooterLogo">
+    <VerticalStackLayout Padding="20,10,20,20" 
+                         HorizontalOptions="Center" 
+                         VerticalOptions="End">
+
+
+
+        <Label Text="Powered by" 
+  FontSize="11" 
+  TextColor="#9CA3AF" 
+  HorizontalOptions="Center" 
+  Margin="0,5,0,0"/>
+
+        <Image Source="logosapymes.png" 
+       HeightRequest="20" 
+       Aspect="AspectFit" 
+       HorizontalOptions="Center"/>
+        <Label Text="Versión 20.Mar.26" 
+  FontSize="11" 
+  TextColor="#9CA3AF" 
+  HorizontalOptions="Center" 
+  Margin="0,5,0,0"/>
+
+
+    </VerticalStackLayout>
+</ContentView>

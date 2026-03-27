@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<mct:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:mct="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui"
+             x:Class="MauiApp6.CobroPopup"
+             CanBeDismissedByTappingOutsideOfPopup="False"
+             Color="Transparent"
+             Opened="OnPopupOpened">
+
+    <Border BackgroundColor="White" Padding="20" WidthRequest="320" StrokeThickness="0">
+        <Border.StrokeShape>
+            <RoundRectangle CornerRadius="15" />
+        </Border.StrokeShape>
+
+        <VerticalStackLayout Spacing="15">
+            <Label Text="Cobrar Venta" FontAttributes="Bold" FontSize="18" TextColor="#111827" HorizontalOptions="Center"/>
+
+            <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Spacing="5">
+                <Label Text="Total a Pagar:" FontSize="16" TextColor="#4B5563" VerticalOptions="Center"/>
+                <Label x:Name="LblTotal" FontSize="20" FontAttributes="Bold" TextColor="#059669" VerticalOptions="Center"/>
+            </StackLayout>
+
+            <Label Text="Cantidad Pagada:" FontSize="14" TextColor="#4B5563" />
+            <Entry x:Name="TxtPago" 
+                   Keyboard="Numeric" 
+                   Placeholder="$0.00" 
+                   FontSize="22" 
+                   FontAttributes="Bold"
+                   HorizontalTextAlignment="Center"
+                   TextChanged="OnPagoTextChanged" />
+
+            <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Spacing="5" Margin="0,10,0,0">
+                <Label Text="Cambio:" FontSize="16" TextColor="#4B5563" VerticalOptions="Center"/>
+                <Label x:Name="LblCambio" Text="$0.00" FontSize="20" FontAttributes="Bold" TextColor="#DC2626" VerticalOptions="Center"/>
+            </StackLayout>
+
+            <Grid ColumnDefinitions="*, *" ColumnSpacing="10" Margin="0,15,0,0">
+                <Button Grid.Column="0" Text="Cancelar" BackgroundColor="#F3F4F6" TextColor="#4B5563" Clicked="OnCancelarClicked" CornerRadius="8"/>
+                <Button Grid.Column="1" x:Name="BtnAceptar" Text="Aceptar" BackgroundColor="#10B981" TextColor="White" Clicked="OnAceptarClicked" CornerRadius="8" IsEnabled="False"/>
+            </Grid>
+        </VerticalStackLayout>
+    </Border>
+
+</mct:Popup>

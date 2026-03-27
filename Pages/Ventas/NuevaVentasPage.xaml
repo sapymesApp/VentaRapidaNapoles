@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             NavigationPage.HasNavigationBar="False"
+             xmlns:controls="clr-namespace:MauiApp6.Controls"
+             x:Class="MauiApp6.NuevaVentasPage">
+
+    <Grid RowDefinitions="Auto, *, Auto" BackgroundColor="#F3F4F6">
+
+        <!-- HEADER CON PESTAÑAS -->
+        <Grid Grid.Row="0" ColumnDefinitions="*, *" BackgroundColor="White" Padding="15,10" ColumnSpacing="15">
+            <Grid.Shadow>
+                <Shadow Brush="Black" Offset="0,2" Radius="5" Opacity="0.05" />
+            </Grid.Shadow>
+
+            <Border x:Name="TabCatalogo" Grid.Column="0" BackgroundColor="#0D9488" StrokeThickness="0" Padding="10" StrokeShape="RoundRectangle 8">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnTabCatalogoTapped"/>
+                </Border.GestureRecognizers>
+                <Label x:Name="LblTabCatalogo" Text="Catálogo" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center"/>
+            </Border>
+
+            <Border x:Name="TabCarrito" Grid.Column="1" BackgroundColor="#F3F4F6" StrokeThickness="0" Padding="10" StrokeShape="RoundRectangle 8">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnTabCarritoTapped"/>
+                </Border.GestureRecognizers>
+                <Label x:Name="LblTabCarrito" Text="Carrito" TextColor="#4B5563" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center"/>
+            </Border>
+        </Grid>
+
+        <!-- CONTENEDOR PRINCIPAL -->
+        <Grid Grid.Row="1" Margin="0,5,0,0">
+
+            <!-- PESTAÑA 1: CATÁLOGO -->
+            <Grid x:Name="ContenedorCatalogo" RowDefinitions="Auto, *" IsVisible="True">
+                <Border Grid.Row="0" BackgroundColor="White" StrokeThickness="0" Padding="15,5,15,10" ZIndex="1" Margin="0,0,0,5">
+                    <Border BackgroundColor="#F9FAFB" Stroke="#E5E7EB" StrokeThickness="1" Padding="5,0">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="12" />
+                        </Border.StrokeShape>
+                        <SearchBar x:Name="SbProductos"
+                               Placeholder="Buscar producto por nombre..."
+                               FontSize="15"
+                               TextColor="#111827"
+                               PlaceholderColor="#9CA3AF"
+                               CancelButtonColor="#EF4444"
+                               BackgroundColor="Transparent"
+                               TextChanged="OnSearchBarTextChanged" />
+                    </Border>
+                </Border>
+
+                <CollectionView Grid.Row="1" x:Name="CvProductos" SelectionMode="None">
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout Orientation="Vertical" Span="4" HorizontalItemSpacing="10" VerticalItemSpacing="10" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <controls:ProductCard Tapped="OnProductoTapped" />
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                    <CollectionView.EmptyView>
+                        <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="10" Margin="0,80">
+                            <Label Text="&#xe8b6;" FontFamily="MaterialIcons" FontSize="80" TextColor="#D1D5DB" HorizontalOptions="Center"/>
+                            <Label Text="No se encontraron productos" FontSize="16" FontAttributes="Bold" TextColor="#4B5563" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                    </CollectionView.EmptyView>
+                </CollectionView>
+            </Grid>
+
+            <!-- PESTAÑA 2: CARRITO -->
+            <Grid x:Name="ContenedorCarrito" RowDefinitions="Auto, *" IsVisible="False" Margin="15,0,15,0">
+                <Border Grid.Row="0" BackgroundColor="#E5E7EB" StrokeThickness="0" Padding="10" Margin="0,0,0,10">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="8" />
+                    </Border.StrokeShape>
+                    <Grid ColumnDefinitions="40, *, 80, 80" ColumnSpacing="10">
+                        <Label Grid.Column="0" Text="Cant." FontAttributes="Bold" FontSize="12" TextColor="#4B5563" HorizontalOptions="Center"/>
+                        <Label Grid.Column="1" Text="Descripción" FontAttributes="Bold" FontSize="12" TextColor="#4B5563"/>
+                        <Label Grid.Column="2" Text="Precio" FontAttributes="Bold" FontSize="12" TextColor="#4B5563" HorizontalOptions="End"/>
+                        <Label Grid.Column="3" Text="Total" FontAttributes="Bold" FontSize="12" TextColor="#4B5563" HorizontalOptions="End"/>
+                    </Grid>
+                </Border>
+
+                <CollectionView Grid.Row="1" x:Name="CvCarrito" SelectionMode="None">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <SwipeView Margin="0,0,0,8">
+                                <SwipeView.LeftItems>
+                                    <SwipeItems>
+                                        <SwipeItem Text="Eliminar" 
+                                                   BackgroundColor="#EF4444" 
+                                                   Invoked="OnEliminarProductoInvoked" 
+                                                   CommandParameter="{Binding .}" />
+                                    </SwipeItems>
+                                </SwipeView.LeftItems>
+                                <Border BackgroundColor="White" Stroke="#E5E7EB" StrokeThickness="1" Padding="10,15" StrokeShape="RoundRectangle 8">
+                                    <Grid ColumnDefinitions="40, *, 80, 80" ColumnSpacing="10" VerticalOptions="Center">
+                                        <Label Grid.Column="0" Text="{Binding CantidadCapturada}" FontAttributes="Bold" TextColor="#111827" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                        <Label Grid.Column="1" Text="{Binding Descripcion}" TextColor="#4B5563" FontSize="13" VerticalOptions="Center" LineBreakMode="TailTruncation" MaxLines="2"/>
+                                        <Label Grid.Column="2" Text="{Binding PrecioVenta, StringFormat='{0:C}'}" TextColor="#4B5563" FontSize="13" HorizontalOptions="End" VerticalOptions="Center"/>
+                                        <Label Grid.Column="3" Text="{Binding Subtotal, StringFormat='{0:C}'}" FontAttributes="Bold" TextColor="#059669" FontSize="13" HorizontalOptions="End" VerticalOptions="Center"/>
+                                    </Grid>
+                                </Border>
+                            </SwipeView>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                    <CollectionView.EmptyView>
+                        <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="10" Margin="0,60">
+                            <Label Text="&#xe8cc;" FontFamily="MaterialIcons" FontSize="60" TextColor="#D1D5DB" HorizontalOptions="Center"/>
+                            <Label Text="El carrito está vacío" FontSize="16" FontAttributes="Bold" TextColor="#4B5563" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                    </CollectionView.EmptyView>
+                </CollectionView>
+            </Grid>
+
+        </Grid>
+
+        <!-- BARRA INFERIOR -->
+        <Border Grid.Row="2" BackgroundColor="White" StrokeThickness="0" Padding="20,15,20,25" ZIndex="1">
+            <Border.Shadow>
+                <Shadow Brush="Black" Offset="0,-4" Radius="10" Opacity="0.05" />
+            </Border.Shadow>
+
+            <VerticalStackLayout Spacing="15">
+                <Grid ColumnDefinitions="*, Auto">
+                    <Label Grid.Column="0" Text="Total de la Venta:" FontSize="16" TextColor="#6B7280" VerticalOptions="Center"/>
+                    <Label Grid.Column="1" x:Name="LblTotal" Text="$0.00" FontSize="26" FontAttributes="Bold" TextColor="#10B981" VerticalOptions="Center"/>
+                </Grid>
+
+                <controls:MenuButton 
+                ButtonText="Registrar venta" 
+                CardBackgroundColor="#F0FFF4" 
+                PrimaryColor="#10B981" 
+                IconGlyph="&#xe877;" 
+                Tapped="MenuButton_Tapped" />
+
+            </VerticalStackLayout>
+        </Border>
+
+        <!-- OVERLAY DE CARGA -->
+        <Grid x:Name="CargaOverlay"
+            Grid.Row="0"
+            Grid.RowSpan="3"
+            IsVisible="False" 
+            BackgroundColor="#80000000" 
+            ZIndex="999">
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer />
+            </Grid.GestureRecognizers>
+            <Frame HorizontalOptions="Center" 
+               VerticalOptions="Center" 
+               BackgroundColor="White" 
+               Padding="30" 
+               CornerRadius="15"
+               HasShadow="True">
+                <VerticalStackLayout Spacing="15" HorizontalOptions="Center">
+                    <ActivityIndicator IsRunning="True" Color="#0D9488" WidthRequest="50" HeightRequest="50" />
+                    <Label Text="Procesando e imprimiendo..." 
+                       FontSize="16" 
+                       FontAttributes="Bold" 
+                       TextColor="#333333" 
+                       HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+            </Frame>
+        </Grid>
+
+    </Grid>
+
+</ContentPage>

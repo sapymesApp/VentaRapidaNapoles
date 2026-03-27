@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             NavigationPage.HasNavigationBar="False"
+             xmlns:controls="clr-namespace:MauiApp6.Controls"
+             x:Class="MauiApp6.ConsultarVentasPage">
+    <Grid RowDefinitions="Auto, *, Auto" BackgroundColor="#F3F4F6">
+
+        <!-- FILTROS -->
+        <Border Grid.Row="0" BackgroundColor="White" StrokeThickness="0" ZIndex="1">
+            <Border.Shadow>
+                <Shadow Brush="Black" Offset="0,4" Radius="8" Opacity="0.05"/>
+            </Border.Shadow>
+
+            <VerticalStackLayout Padding="20,15">
+                <Grid ColumnDefinitions="*, Auto" ColumnSpacing="15">
+
+                    <VerticalStackLayout Grid.Column="0" Spacing="6">
+                        <Label Text="Fecha de consulta" FontSize="12" FontAttributes="Bold" TextColor="#6B7280" />
+                        <Border Stroke="#E5E7EB" StrokeThickness="1" BackgroundColor="#F9FAFB" Padding="10,0">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="8" />
+                            </Border.StrokeShape>
+                            <DatePicker x:Name="DpFecha" 
+                                    DateSelected="OnDateSelected" 
+                                    Format="dd MMM yyyy"
+                                    TextColor="#111827"
+                                    BackgroundColor="Transparent"/>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Grid.Column="1" Spacing="6" VerticalOptions="Center" HorizontalOptions="End">
+                        <Label Text="Con saldo" FontSize="12" FontAttributes="Bold" TextColor="#6B7280" HorizontalTextAlignment="Center"/>
+                        <Switch OnColor="#F59E0B" 
+                            Toggled="OnMostrarConSaldoToggled" 
+                            HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+
+                </Grid>
+            </VerticalStackLayout>
+        </Border>
+
+        <!-- LISTADO DE VENTAS -->
+        <CollectionView Grid.Row="1" x:Name="CvVentas" 
+                    SelectionMode="Single"
+                    SelectionChanged="OnVentasSelected"
+                    Margin="0,10,0,0">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+
+                    <Border BackgroundColor="White" 
+                        Stroke="#E5E7EB" 
+                        StrokeThickness="1" 
+                        Margin="15,6" 
+                        Padding="15" 
+                        StrokeShape="RoundRectangle 15">
+
+                        <Border.Shadow>
+                            <Shadow Brush="Black" Offset="0,2" Radius="5" Opacity="0.03"/>
+                        </Border.Shadow>
+
+                        <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="12">
+
+                            <Border Grid.Column="0" WidthRequest="44" HeightRequest="44" BackgroundColor="#F3F4F6" StrokeThickness="0" VerticalOptions="Start">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="22" />
+                                </Border.StrokeShape>
+                                <Label Text="&#xe7fd;" FontFamily="MaterialIcons" TextColor="#9CA3AF" FontSize="22" HorizontalOptions="Center" VerticalOptions="Center"/>
+                            </Border>
+
+                            <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                                <Label Text="{Binding ClienteNombre}" FontSize="15" FontAttributes="Bold" TextColor="#111827" LineBreakMode="TailTruncation" />
+                                <Label Text="{Binding Id, StringFormat='Folio: {0}'}" FontSize="12" TextColor="#6B7280" />
+
+                                <HorizontalStackLayout Spacing="4" Margin="0,4,0,0">
+                                    <Label Text="&#xe8b5;" FontFamily="MaterialIcons" FontSize="14" TextColor="#9CA3AF" VerticalOptions="Center"/>
+                                    <Label Text="{Binding Fecha, StringFormat='{0:HH:mm}'}" FontSize="12" TextColor="#9CA3AF" VerticalOptions="Center"/>
+                                </HorizontalStackLayout>
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Grid.Column="2" Spacing="5" HorizontalOptions="End" VerticalOptions="Center">
+
+                                <Border Padding="10,4" StrokeThickness="0" HorizontalOptions="End">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="10" />
+                                    </Border.StrokeShape>
+                                    <Label Text="{Binding Status}" FontSize="10" FontAttributes="Bold" TextColor="White" HorizontalOptions="Center"/>
+                                    <Border.Triggers>
+                                        <DataTrigger TargetType="Border" Binding="{Binding Status}" Value="Saldada">
+                                            <Setter Property="BackgroundColor" Value="#10B981" />
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="Border" Binding="{Binding Status}" Value="Abierta">
+                                            <Setter Property="BackgroundColor" Value="#F59E0B" />
+                                        </DataTrigger>
+                                    </Border.Triggers>
+                                </Border>
+
+                                <Label Text="{Binding Total, StringFormat='{0:C}'}" FontSize="18" FontAttributes="Bold" TextColor="#111827" HorizontalOptions="End" Margin="0,4,0,0"/>
+
+                                <Label Text="{Binding Saldo, StringFormat='Saldo: {0:C}'}" FontSize="12" FontAttributes="Bold" TextColor="#EF4444" HorizontalOptions="End" />
+                            </VerticalStackLayout>
+
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+            <CollectionView.EmptyView>
+                <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="10" Margin="0,80">
+                    <Label Text="&#xe8b6;" FontFamily="MaterialIcons" FontSize="80" TextColor="#D1D5DB" HorizontalOptions="Center"/>
+                    <Label Text="No hay ventas registradas" FontSize="16" FontAttributes="Bold" TextColor="#4B5563" HorizontalOptions="Center"/>
+                    <Label Text="Intenta seleccionar otra fecha." FontSize="14" TextColor="#9CA3AF" HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+            </CollectionView.EmptyView>
+        </CollectionView>
+
+        <!-- BOTONES DE SESIONES DE VENTA -->
+        <Border Grid.Row="2" BackgroundColor="White" StrokeThickness="0" Padding="15,15,15,25" ZIndex="1">
+            <Border.Shadow>
+                <Shadow Brush="Black" Offset="0,-4" Radius="8" Opacity="0.05"/>
+            </Border.Shadow>
+
+            <Grid ColumnDefinitions="*, *, *" ColumnSpacing="10">
+                <controls:MenuButton Grid.Column="0"
+                    ButtonText="Venta 1" 
+                    CardBackgroundColor="#F0FFF4" 
+                    PrimaryColor="#10B981" 
+                    IconGlyph="&#xf710;" 
+                    Tapped="OnVenta1Tapped" />
+
+                <controls:MenuButton Grid.Column="1"
+                    ButtonText="Venta 2" 
+                    CardBackgroundColor="#FFFBEB" 
+                    PrimaryColor="#F59E0B" 
+                    IconGlyph="&#xf710;" 
+                    Tapped="OnVenta2Tapped" />
+
+                <controls:MenuButton Grid.Column="2"
+                    ButtonText="Venta 3" 
+                    CardBackgroundColor="#EFF6FF" 
+                    PrimaryColor="#3B82F6" 
+                    IconGlyph="&#xf710;" 
+                    Tapped="OnVenta3Tapped" />
+            </Grid>
+        </Border>
+
+    </Grid>
+</ContentPage>

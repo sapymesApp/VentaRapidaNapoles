@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MauiApp6.MainPage"
+             Shell.NavBarIsVisible="False"
+             Shell.BackButtonBehavior="{BackButtonBehavior IsVisible=False}"
+             xmlns:controls="clr-namespace:MauiApp6.Controls"
+             BackgroundColor="#F0F0F0">
+    <ContentPage.Resources>
+        <Style x:Key="MenuCardStyle" TargetType="Border">
+            <Setter Property="StrokeShape" Value="RoundRectangle 15"/>
+            <Setter Property="Stroke" Value="#2196F3"/>
+            <Setter Property="StrokeThickness" Value="1"/>
+            <Setter Property="BackgroundColor" Value="White"/>
+            <Setter Property="HeightRequest" Value="140"/>
+            <Setter Property="WidthRequest" Value="140"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Margin" Value="10"/>
+
+            <Setter Property="Shadow">
+                <Shadow Brush="Black"
+                        Offset="0,5"
+                        Radius="5"
+                        Opacity="0.1" />
+            </Setter>
+        </Style>
+
+        <Style x:Key="CardTextStyle" TargetType="Label">
+            <Setter Property="TextColor" Value="#2196F3"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontAttributes" Value="Bold"/>
+            <Setter Property="HorizontalOptions" Value="Center"/>
+            <Setter Property="VerticalOptions" Value="End"/>
+            <Setter Property="Margin" Value="0,10,0,0"/>
+        </Style>
+    </ContentPage.Resources>
+
+
+    <Grid RowDefinitions="Auto, *, Auto" BackgroundColor="#F3F4F6">
+
+        <Border Grid.Row="0" BackgroundColor="#0284C7" StrokeThickness="0" Padding="20,40,20,70" Margin="0,0,0,-50" ZIndex="0">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="0,0,35,35" />
+            </Border.StrokeShape>
+
+            <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                <Label Text="SAPyMEs" FontSize="26" FontAttributes="Bold" TextColor="White" HorizontalOptions="Center" />
+                <Label Text="Sistemas Administrativos para la PyMEs" FontSize="14" TextColor="#E0F2FE" HorizontalOptions="Center" />
+            </VerticalStackLayout>
+        </Border>
+
+        <ScrollView Grid.Row="1" ZIndex="1">
+            <VerticalStackLayout Spacing="25" Padding="20,0,20,30">
+
+                <Border WidthRequest="150" HeightRequest="150" BackgroundColor="#0A1929" Stroke="White" StrokeThickness="4" HorizontalOptions="Center">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="30" />
+                    </Border.StrokeShape>
+                    <Border.Shadow>
+                        <Shadow Brush="Black" Offset="0,8" Radius="15" Opacity="0.15" />
+                    </Border.Shadow>
+
+                    <Image x:Name="imgLogo" Aspect="AspectFill" BackgroundColor="#E0F2FE" />
+                </Border>
+
+                <Border BackgroundColor="White" StrokeThickness="0" Padding="20,25">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="20" />
+                    </Border.StrokeShape>
+                    <Border.Shadow>
+                        <Shadow Brush="Black" Offset="0,4" Radius="10" Opacity="0.05" />
+                    </Border.Shadow>
+
+                    <VerticalStackLayout Spacing="15">
+
+                        <controls:MenuButton 
+                        ButtonText="Ventas" 
+                        CardBackgroundColor="#F0FFF4" 
+                        PrimaryColor="#10B981" 
+                        IconGlyph="&#xf17e;" 
+                        Tapped="mnuVentas" />
+
+                        <controls:MenuButton 
+                        ButtonText="Catálogos" 
+                        CardBackgroundColor="#E0F2FE" 
+                        PrimaryColor="#0284C7" 
+                        IconGlyph="&#xe02f;" 
+                        Tapped="mnuCatalogo" />
+
+                        <controls:MenuButton 
+                        ButtonText="Cortes" 
+                        CardBackgroundColor="#E8EAF6" 
+                        PrimaryColor="#3F51B5" 
+                        IconGlyph="&#xe24a;" 
+                        Tapped="mnuCortes" />
+
+                        <BoxView HeightRequest="1" Color="#F3F4F6" Margin="10,5" />
+
+                        <controls:MenuButton 
+                        ButtonText="Sincronizar" 
+                        CardBackgroundColor="#F8FAFC" 
+                        PrimaryColor="#475569" 
+                        IconGlyph="&#xe86a;" 
+                        Tapped="mnuSincronizar" />
+
+                        <controls:MenuButton 
+                        ButtonText="Configuración" 
+                        CardBackgroundColor="#FFFBEB" 
+                        PrimaryColor="#F59E0B" 
+                        IconGlyph="&#xe8b8;" 
+                        Tapped="mnuConfiguracion" />
+
+                    </VerticalStackLayout>
+                </Border>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <controls:FooterLogo Grid.Row="2" Margin="0,10,0,20" />
+
+    </Grid>
+</ContentPage>

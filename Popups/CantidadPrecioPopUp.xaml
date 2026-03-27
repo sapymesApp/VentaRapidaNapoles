@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+               xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+               xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+               x:Class="MauiApp6.CantidadPrecioPopUp"
+               Opened="OnPopupOpened"
+               Color="Transparent">
+
+    <Border BackgroundColor="White" 
+            StrokeShape="RoundRectangle 15" 
+            Padding="20" 
+            WidthRequest="300"
+            VerticalOptions="Center">
+
+        <VerticalStackLayout Spacing="15">
+            <Label x:Name="LblProducto" 
+                   FontAttributes="Bold" 
+                   FontSize="18"
+                   HorizontalOptions="Center"
+                   TextColor="Black"/>
+
+            <Label Text="Ingresa la cantidad:" FontSize="12" TextColor="Gray" HorizontalOptions="Center"/>
+
+            <Entry x:Name="TxtCantidad" 
+                   Keyboard="Numeric" 
+                   Placeholder="0"
+                   HorizontalTextAlignment="Center" 
+                   FontSize="24"
+                   TextColor="Black"
+                   Completed="OnTxtCantidadCompleted"/>
+
+            <Label Text="Modifica el precio:" FontSize="12" TextColor="Gray" HorizontalOptions="Center"/>
+
+            <Entry x:Name="TxtPrecio" 
+                   Keyboard="Numeric" 
+                   Placeholder="0.00"
+                   HorizontalTextAlignment="Center" 
+                   FontSize="24"
+                   TextColor="Black"
+                   Completed="OnAceptarClicked"/>
+
+            <Button Text="ACEPTAR" 
+                    Clicked="OnAceptarClicked" 
+                    BackgroundColor="#2196F3"
+                    TextColor="White"
+                    FontAttributes="Bold"/>
+        </VerticalStackLayout>
+    </Border>
+</toolkit:Popup>

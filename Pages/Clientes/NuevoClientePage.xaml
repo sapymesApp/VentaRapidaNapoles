@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MauiApp6.NuevoClientePage"
+             NavigationPage.HasNavigationBar="False">
+    
+    <VerticalStackLayout Padding="20" Spacing="15">
+        
+        <Label Text="Nuevo Cliente" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" Margin="0,0,0,10"/>
+
+        <Label Text="Nombre" FontSize="14" TextColor="Gray"/>
+        <Entry x:Name="TxtNombre" 
+               Placeholder="Nombre del cliente"
+               ReturnType="Next"
+               Completed="OnNombreCompleted"/>
+
+        <Label Text="Dirección" FontSize="14" TextColor="Gray"/>
+        <Entry x:Name="TxtDireccion" 
+               Placeholder="Dirección del cliente" 
+               ReturnType="Next"
+               Completed="OnDireccionCompleted"/>
+
+        <Label Text="Teléfono" FontSize="14" TextColor="Gray"/>
+        <Entry x:Name="TxtTelefono" 
+               Placeholder="10 dígitos" 
+               Keyboard="Telephone"
+               ReturnType="Next"
+               Completed="OnTelefonoCompleted"/>
+
+        <Label Text="WhatsApp" FontSize="14" TextColor="Gray"/>
+        <Entry x:Name="TxtWhatsApp" 
+               Placeholder="10 dígitos" 
+               Keyboard="Telephone"
+               ReturnType="Done"
+               Completed="OnWhatsAppCompleted"/>
+
+        <Grid ColumnDefinitions="*,*" ColumnSpacing="15" Margin="0,20,0,0">
+            <Button Grid.Column="0" 
+                    Text="Cancelar" 
+                    BackgroundColor="#607D8B"
+                    Clicked="OnCancelarClicked"/>
+                    
+            <Button Grid.Column="1"
+                    Text="Guardar" 
+                    BackgroundColor="#4CAF50"
+                    Clicked="OnGuardarClicked"/>
+        </Grid>
+
+    </VerticalStackLayout>
+</ContentPage>

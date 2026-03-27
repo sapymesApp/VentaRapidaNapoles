@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MauiApp6.NuevoProductoPage"
+             NavigationPage.HasNavigationBar="False"
+             >
+    <VerticalStackLayout Padding="20" Spacing="15">
+
+        <Label Text="Descripción del Producto" FontSize="14" TextColor="Gray"/>
+        <Entry x:Name="TxtDescripcion" 
+               Placeholder="Nombre del producto"
+               ReturnType="Next"
+               Completed="OnDescripcionCompleted"/>
+
+        <Label Text="Precio" FontSize="14" TextColor="Gray"/>
+        <Entry x:Name="TxtPrecio" 
+               Placeholder="0.00" 
+               Keyboard="Numeric"
+               ReturnType="Done"
+                Completed="OnPrecioCompleted"/>
+
+        <Button Text="Guardar" 
+                Clicked="OnGuardarClicked"
+                Margin="0,20,0,0"/>
+
+    </VerticalStackLayout>
+
+</ContentPage>

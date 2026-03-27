@@ -1,0 +1,18 @@
+﻿
+  <PropertyGroup Condition="$(TargetFramework.Contains('-android'))">
+    <!-- Le decimos que genere un APK y no un AAB -->
+    <AndroidPackageFormat>apk</AndroidPackageFormat>
+
+    <!-- ⚠️ EL TRUCO SECRETO ⚠️ -->
+    <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
+  </PropertyGroup>
+
+
+	<PropertyGroup Condition="'$(Configuration)' == 'Release' And $(TargetFramework.Contains('-android'))">
+		<!-- Queremos el archivo instalable directo, no el formato de la tienda -->
+		<AndroidPackageFormat>apk</AndroidPackageFormat>
+		
+		<!-- ⚠️ EL TRUCO SECRETO PARA NO USAR PLAY STORE ⚠️ -->
+		<!-- Le decimos que firme la app con una llave genérica automática para poder instalarla -->
+		<AndroidUseDefaultKeystore>true</AndroidUseDefaultKeystore>
+	</PropertyGroup>

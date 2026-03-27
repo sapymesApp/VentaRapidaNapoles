@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             NavigationPage.HasNavigationBar="False"
+             xmlns:controls="clr-namespace:MauiApp6.Controls" 
+             x:Class="MauiApp6.ProductosPage">
+    <Grid RowDefinitions="*, Auto" BackgroundColor="#F3F4F6">
+
+        <CollectionView x:Name="CvProductos"
+                    SelectionMode="Single"
+                    Grid.Row="0">
+
+            <CollectionView.Header>
+                <VerticalStackLayout Padding="20,20,20,10">
+                    <Label Text="Inventario de Productos" FontSize="24" FontAttributes="Bold" TextColor="#111827" />
+                    <Label Text="Desliza para editar o da doble toque para seleccionar" FontSize="13" TextColor="#6B7280" />
+                </VerticalStackLayout>
+            </CollectionView.Header>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+
+                    <SwipeView Threshold="80" Margin="15,6">
+
+                        <SwipeView.LeftItems>
+                            <SwipeItems Mode="Reveal">
+                                <SwipeItem Text="Editar"
+                                       IconImageSource="editar.png"
+                                       BackgroundColor="#10B981"
+                                       Invoked="OnEditarSwipeInvoked" />
+                            </SwipeItems>
+                        </SwipeView.LeftItems>
+
+                        <SwipeView.RightItems>
+                            <SwipeItems Mode="Execute">
+                                <SwipeItem Text="Eliminar"
+                                       IconImageSource="eliminar.png"
+                                       BackgroundColor="#EF4444"
+                                       IsDestructive="True"
+                                       Invoked="OnEliminarSwipeInvoked" />
+                            </SwipeItems>
+                        </SwipeView.RightItems>
+
+                        <SwipeView.Content>
+                            <Border Stroke="#E5E7EB" StrokeThickness="1" Padding="15" BackgroundColor="White">
+
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="12" />
+                                </Border.StrokeShape>
+
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer NumberOfTapsRequired="2" />
+                                </Border.GestureRecognizers>
+
+                                <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="15">
+
+                                    <Border Grid.Column="0" WidthRequest="46" HeightRequest="46" BackgroundColor="#F0F9FF" StrokeThickness="0" VerticalOptions="Center">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="23" />
+                                        </Border.StrokeShape>
+                                        <Image Source="{Binding ImgSource}" Aspect="AspectFill" HorizontalOptions="Fill" VerticalOptions="Fill"/>
+                                    </Border>
+
+                                    <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
+                                        <Label Text="{Binding Descripcion}" FontAttributes="Bold" FontSize="15" TextColor="#111827" LineBreakMode="TailTruncation" MaxLines="2"/>
+                                        <Label Text="{Binding Id, StringFormat='Código: {0}'}" FontSize="12" TextColor="#6B7280"/>
+                                    </VerticalStackLayout>
+
+                                    <VerticalStackLayout Grid.Column="2" VerticalOptions="Center" HorizontalOptions="End">
+                                        <Label Text="Precio" FontSize="10" TextColor="#9CA3AF" HorizontalOptions="End" />
+                                        <Label Text="{Binding Precio1, StringFormat='{0:C}'}" FontAttributes="Bold" FontSize="16" TextColor="#059669" HorizontalOptions="End"/>
+                                    </VerticalStackLayout>
+                                </Grid>
+
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup Name="CommonStates">
+                                        <VisualState Name="Selected">
+                                            <VisualState.Setters>
+                                                <Setter Property="BackgroundColor" Value="#F0F9FF" />
+                                                <Setter Property="Stroke" Value="#BAE6FD" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                        <VisualState Name="Normal">
+                                            <VisualState.Setters>
+                                                <Setter Property="BackgroundColor" Value="White" />
+                                                <Setter Property="Stroke" Value="#E5E7EB" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+
+                            </Border>
+                        </SwipeView.Content>
+
+                    </SwipeView>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!--<Border Grid.Row="1" BackgroundColor="White" StrokeThickness="0" Padding="15,15,15,25" ZIndex="1">
+            <Border.Shadow>
+                <Shadow Brush="Black" Offset="0,-4" Radius="10" Opacity="0.05" />
+            </Border.Shadow>
+
+            <controls:MenuButton 
+            ButtonText="Nuevo Producto" 
+            CardBackgroundColor="#F0FFF4" 
+            PrimaryColor="#10B981" 
+            IconGlyph="&#xe145;" 
+            Tapped="OnNuevoProductoClicked" />
+        </Border>-->
+
+    </Grid>
+</ContentPage>

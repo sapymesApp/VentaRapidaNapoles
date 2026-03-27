@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MauiApp6.Controls.MenuButton"
+             x:Name="thisControl">
+
+    <Border BackgroundColor="{Binding CardBackgroundColor, Source={x:Reference thisControl}}" 
+            StrokeThickness="0" HeightRequest="80">
+
+        <Border.StrokeShape>
+            <RoundRectangle CornerRadius="12" />
+        </Border.StrokeShape>
+
+        <Border.GestureRecognizers>
+            <TapGestureRecognizer Tapped="OnBorderTapped"/>
+        </Border.GestureRecognizers>
+
+        <Grid ColumnDefinitions="*, Auto, 8">
+            <VerticalStackLayout Grid.Column="0" VerticalOptions="Center" Margin="20,0,0,0">
+                <Label Text="{Binding ButtonText, Source={x:Reference thisControl}}" 
+                       TextColor="#111827" FontSize="22" FontAttributes="Bold" Margin="0,2,0,0"/>
+            </VerticalStackLayout>
+
+            <Border Grid.Column="1" BackgroundColor="White" WidthRequest="45" HeightRequest="45" StrokeThickness="0" Margin="0,0,15,0" VerticalOptions="Center">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="22.5" />
+                </Border.StrokeShape>
+                <Image HorizontalOptions="Center" VerticalOptions="Center">
+                    <Image.Source>
+                        <FontImageSource FontFamily="MaterialIcons" 
+                                         Glyph="{Binding IconGlyph, Source={x:Reference thisControl}}" 
+                                         Color="{Binding PrimaryColor, Source={x:Reference thisControl}}" Size="32"/>
+                    </Image.Source>
+                </Image>
+            </Border>
+
+            <BoxView Grid.Column="2" BackgroundColor="{Binding PrimaryColor, Source={x:Reference thisControl}}" />
+        </Grid>
+    </Border>
+</ContentView>

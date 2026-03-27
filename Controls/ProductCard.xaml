@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MauiApp6.Controls.ProductCard"
+             x:Name="thisControl">
+    
+    <Border BackgroundColor="White" Stroke="#E5E7EB" StrokeThickness="1" Margin="5" Padding="10" StrokeShape="RoundRectangle 12">
+
+        <Border.GestureRecognizers>
+            <TapGestureRecognizer Tapped="OnCardTapped"/>
+        </Border.GestureRecognizers>
+
+        <Grid RowDefinitions="Auto, *" RowSpacing="10">
+
+            <Border Grid.Row="0" WidthRequest="46" HeightRequest="46" BackgroundColor="#F0F9FF" StrokeThickness="0" HorizontalOptions="Center">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="10" />
+                </Border.StrokeShape>
+                <Grid>                    
+                    <Image Source="{Binding ImgSource}" Aspect="AspectFill" HorizontalOptions="Fill" VerticalOptions="Fill"/>
+                </Grid>
+            </Border>
+
+            <VerticalStackLayout Grid.Row="1" Spacing="2" HorizontalOptions="Center" VerticalOptions="Center">
+                <Label Text="{Binding Descripcion}" FontSize="13" FontAttributes="Bold" TextColor="#111827" LineBreakMode="TailTruncation" MaxLines="2" HorizontalTextAlignment="Center"/>
+                <Label Text="{Binding PrecioVenta, StringFormat='{0:C}'}" FontSize="14" FontAttributes="Bold" TextColor="#059669" HorizontalTextAlignment="Center"/>
+            </VerticalStackLayout>
+
+        </Grid>
+    </Border>
+
+</ContentView>
