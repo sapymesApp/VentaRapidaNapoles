@@ -106,60 +106,60 @@ public partial class DetalleVentasPage : ContentPage
     }
 
 
-    //private async void OnFinalizarClicked(object sender, EventArgs e)
-    private async void OnAbonarClicked(object sender, EventArgs e)
-    {
-        var popup = new CantidadPopup($"Abono para la ventas #{_ventas.Id}");
-        var popupResult = await this.ShowPopupAsync(popup);
+    ////private async void OnFinalizarClicked(object sender, EventArgs e)
+    //private async void OnAbonarClicked(object sender, EventArgs e)
+    //{
+    //    var popup = new CantidadPopup($"Abono para la ventas #{_ventas.Id}");
+    //    var popupResult = await this.ShowPopupAsync(popup);
         
-        if (popupResult is CantidadPrecioResult result && result.Cantidad > 0)
-        {
-            decimal cantAbono = result.Cantidad;
-            if (cantAbono > _ventas.Saldo)
-            {
-                await DisplayAlert("Error", "El abono no puede ser mayor al saldo pendiente.", "OK");
-                return;
-            }
+    //    if (popupResult is CantidadPrecioResult result && result.Cantidad > 0)
+    //    {
+    //        decimal cantAbono = result.Cantidad;
+    //        if (cantAbono > _ventas.Saldo)
+    //        {
+    //            await DisplayAlert("Error", "El abono no puede ser mayor al saldo pendiente.", "OK");
+    //            return;
+    //        }
 
-            _ventas.Abono += cantAbono;
-            _ventas.Saldo -= cantAbono;
+    //        _ventas.Abono += cantAbono;
+    //        _ventas.Saldo -= cantAbono;
 
-            if (_ventas.Saldo <= 0)
-            {
-                _ventas.Status = "Saldada";
-                LblStatus.Text = "SALDADA";
-                LblStatus.TextColor = Color.Parse("#4CAF50");
-                BtnAbonar.IsVisible = false;
-                //BtnImprimir.IsVisible = true;
-            }
-            else
-            {
-                // Update UI visually if still not 0
-                CargarDetalles(); // it refreshes gran total, but maybe just reload ui manually
-            }
+    //        if (_ventas.Saldo <= 0)
+    //        {
+    //            _ventas.Status = "Saldada";
+    //            LblStatus.Text = "SALDADA";
+    //            LblStatus.TextColor = Color.Parse("#4CAF50");
+    //            BtnAbonar.IsVisible = false;
+    //            //BtnImprimir.IsVisible = true;
+    //        }
+    //        else
+    //        {
+    //            // Update UI visually if still not 0
+    //            CargarDetalles(); // it refreshes gran total, but maybe just reload ui manually
+    //        }
 
-            await App.Database.UpdateVentasAsync(_ventas);
+    //        await App.Database.UpdateVentasAsync(_ventas);
 
 
-            int idEmpresa = Preferences.Get("IdEmpresa", 0);
-            int idDisposito = Preferences.Get("IdDispositivo", 0);
+    //        int idEmpresa = Preferences.Get("IdEmpresa", 0);
+    //        int idDisposito = Preferences.Get("IdDispositivo", 0);
 
-            var nuevoAbono = new MauiApp6.Models.Abonos { 
-                idEmpresa= idEmpresa,
-                idVenta = _ventas.Id, 
-                idCliente = _ventas.idCliente, 
-                idDispositivo= idDisposito,
-                Fecha = DateTime.Now, 
-                Abono = cantAbono 
-            };
-            await App.Database.SaveAbonoAsync(nuevoAbono);
-            await DisplayAlert("�xito", $"Abono registrado correctamente. Saldo restante: {(_ventas.Saldo):C}", "OK");
+    //        var nuevoAbono = new MauiApp6.Models.Abonos { 
+    //            idEmpresa= idEmpresa,
+    //            idVenta = _ventas.Id, 
+    //            idCliente = _ventas.idCliente, 
+    //            idDispositivo= idDisposito,
+    //            Fecha = DateTime.Now, 
+    //            Abono = cantAbono 
+    //        };
+    //        await App.Database.SaveAbonoAsync(nuevoAbono);
+    //        await DisplayAlert("�xito", $"Abono registrado correctamente. Saldo restante: {(_ventas.Saldo):C}", "OK");
             
-            // Refrescar lista de detalles para que se vea reflejado (aunque el abono es a la ventas no al detalle, 
-            // el header se puede actualizar as si es necesario, o podemos hacer PopAsync si se prefiere).
-            CargarDetalles(); // refrescar cabecera/total visual
-        }
-    }
+    //        // Refrescar lista de detalles para que se vea reflejado (aunque el abono es a la ventas no al detalle, 
+    //        // el header se puede actualizar as si es necesario, o podemos hacer PopAsync si se prefiere).
+    //        CargarDetalles(); // refrescar cabecera/total visual
+    //    }
+    //}
 
 
 

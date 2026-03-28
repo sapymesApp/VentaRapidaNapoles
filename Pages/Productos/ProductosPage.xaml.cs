@@ -4,13 +4,12 @@ namespace MauiApp6;
 
 public partial class ProductosPage : ContentPage
 {
+    private List<Producto> _allProductos = new List<Producto>();
+
 	public ProductosPage()
 	{
 		InitializeComponent();
 	}
-
-
-
 
     protected override async void OnAppearing()
     {
@@ -24,7 +23,26 @@ public partial class ProductosPage : ContentPage
     {
         // Llamada a la BD
         var lista = await App.Database.GetProductosAsync();
-        CvProductos.ItemsSource = lista;
+        _allProductos = lista.ToList();
+        CvProductos.ItemsSource = _allProductos;
+    }
+
+    private void OnSearchTextChanged(object sender, TextChangedEventArgs e)
+    {
+        string textoBusqueda = e.NewTextValue?.ToUpper() ?? string.Empty;
+
+        if (string.IsNullOrWhiteSpace(textoBusqueda))
+        {
+            CvProductos.ItemsSource = _allProductos;
+        }
+        else
+        {
+            var filtrados = _allProductos
+                .Where(p => p.Descripcion != null && p.Descripcion.ToUpper().Contains(textoBusqueda))
+                .ToList();
+
+            CvProductos.ItemsSource = filtrados;
+        }
     }
 
     private async void OnNuevoProductoClicked(object sender, EventArgs e)
@@ -32,52 +50,6 @@ public partial class ProductosPage : ContentPage
         // Abrir ventana de alta
         await Navigation.PushAsync(new NuevoProductoPage());
     }
-
-    //private async void OnEliminarClicked(object sender, EventArgs e)
-    //{
-    //    // 1. Verificar si hay algo seleccionado
-    //    var productoSeleccionado = CvProductos.SelectedItem as Producto;
-
-    //    if (productoSeleccionado == null)
-    //    {
-    //        await DisplayAlert("Atención", "Selecciona un producto de la lista primero.", "OK");
-    //        return;
-    //    }
-
-    //    // 2. Preguntar al usuario
-    //    bool confirmar = await DisplayAlert("Eliminar",
-    //        $"¿Estás seguro de eliminar '{productoSeleccionado.Descripcion}'?",
-    //        "Sí, eliminar", "Cancelar");
-
-    //    if (confirmar)
-    //    {
-    //        // 3. Eliminar de BD
-    //        await App.Database.DeleteProductoAsync(productoSeleccionado);
-
-    //        // 4. Recargar la lista y limpiar selección
-    //        await CargarProductos();
-    //        CvProductos.SelectedItem = null;
-    //    }
-    //}
-
-
-
-
-    //private async void OnProductoDoubleTapped(object sender, EventArgs e)
-    //{
-    //    // El 'sender' es el Border que recibió los toques
-    //    var border = (Border)sender;
-
-    //    // El BindingContext de ese Border es el objeto Producto de la lista
-    //    var productoSeleccionado = (Producto)border.BindingContext;
-
-    //    if (productoSeleccionado != null)
-    //    {
-    //        // Navegamos a la página de edición pasando el objeto
-    //        await Navigation.PushAsync(new EditarPrecioPage(productoSeleccionado));
-    //    }
-    //}
-
 
     // Se dispara al deslizar a la izquierda (Editar)
     private async void OnEditarSwipeInvoked(object sender, EventArgs e)
@@ -105,23 +77,20 @@ public partial class ProductosPage : ContentPage
         }
     }
 
-
-    // Creamos este método auxiliar para no repetir código entre el botón y el swipe
+    // Creamos este mÃ©todo auxiliar para no repetir cÃ³digo entre el botÃ³n y el swipe
     private async Task ProcesarEliminacion(Producto producto)
     {
         bool confirmar = await DisplayAlert("Eliminar",
-            $"¿Estás seguro de eliminar '{producto.Descripcion}'?",
-            "Sí, eliminar", "Cancelar");
+            $"Â¿EstÃ¡s seguro de eliminar '{producto.Descripcion}'?",
+            "SÃ­, eliminar", "Cancelar");
 
         if (confirmar)
         {
             await App.Database.DeleteProductoAsync(producto);
             await CargarProductos();
 
-            // Limpiamos la selección por si acaso
+            // Limpiamos la selecciÃ³n por si acaso
             CvProductos.SelectedItem = null;
         }
     }
-
-
 }

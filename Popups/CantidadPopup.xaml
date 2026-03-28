@@ -19,7 +19,7 @@
                    HorizontalOptions="Center"
                    TextColor="Black"/>
 
-            <Label Text="Ingresa la cantidad:" FontSize="12" TextColor="Gray" HorizontalOptions="Center"/>
+            <Label x:Name="LblInstruccion" Text="Ingresa la cantidad:" FontSize="12" TextColor="Gray" HorizontalOptions="Center"/>
 
             <Entry x:Name="TxtCantidad" 
                    IsReadOnly="True"
@@ -28,6 +28,16 @@
                    FontSize="24"
                    TextColor="Black"
                    Completed="OnTxtCantidadCompleted"/>
+
+            <Label x:Name="LblEquivalencia" 
+                   Text="Equivale a: 0.000 Kg" 
+                   FontSize="14" 
+                   TextColor="#2196F3" 
+                   FontAttributes="Italic, Bold"
+                   HorizontalOptions="Center" 
+                   IsVisible="False"
+                   Margin="0,-5,0,10"/>
+            
 
             <Grid ColumnDefinitions="*,*,*" RowDefinitions="Auto,Auto,Auto,Auto" ColumnSpacing="5" RowSpacing="5">
                 <Button Text="7" Grid.Row="0" Grid.Column="0" Clicked="OnDigitClicked" BackgroundColor="#F1F1F1" TextColor="Black" FontSize="20" FontAttributes="Bold" Padding="10"/>
@@ -60,6 +70,17 @@
                     TextColor="White"
                     FontAttributes="Bold"
                     IsVisible="True"/>
+
+            <Button x:Name="BtnModoMonto" 
+            Text="Vender por $" 
+            Clicked="OnModoMontoClicked" 
+            BackgroundColor="#FF9800" 
+            TextColor="White"
+            FontAttributes="Bold"
+            Margin="0,10,0,0"
+            IsVisible="False"/>
+
+
         </VerticalStackLayout>
     </Border>
 </toolkit:Popup>

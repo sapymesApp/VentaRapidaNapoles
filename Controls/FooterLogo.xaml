@@ -18,7 +18,7 @@
        HeightRequest="20" 
        Aspect="AspectFit" 
        HorizontalOptions="Center"/>
-        <Label Text="Versión 20.Mar.26" 
+        <Label Text="Versión 27.Mar.26" 
   FontSize="11" 
   TextColor="#9CA3AF" 
   HorizontalOptions="Center" 

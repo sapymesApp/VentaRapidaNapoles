@@ -123,6 +123,107 @@ namespace MauiApp6.Platforms.Android
             }
         }
 
+
+
+        public async Task<string> LeerPesoAsync(string deviceName)
+        {
+            BluetoothAdapter adapter = BluetoothAdapter.DefaultAdapter;
+            if (adapter == null) throw new Exception("No se encontró adaptador Bluetooth");
+
+            BluetoothDevice device = adapter.BondedDevices.FirstOrDefault(d => d.Name == deviceName);
+            if (device == null) throw new Exception("Báscula no encontrada entre dispositivos vinculados");
+
+            BluetoothSocket socket = null;
+            try
+            {
+                // UUID estándar para SPP (Serial Port Profile)
+                UUID uuid = UUID.FromString("00001101-0000-1000-8000-00805F9B34FB");
+                socket = device.CreateRfcommSocketToServiceRecord(uuid);
+                await socket.ConnectAsync();
+
+                if (socket.IsConnected)
+                {
+                    byte[] buffer = new byte[1024];
+
+                    // Damos medio segundo para que la báscula envíe su ráfaga de datos
+                    await Task.Delay(500);
+
+                    if (socket.InputStream.IsDataAvailable())
+                    {
+                        int bytesRead = await socket.InputStream.ReadAsync(buffer, 0, buffer.Length);
+                        string data = Encoding.ASCII.GetString(buffer, 0, bytesRead);
+                        return data;
+                    }
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error al leer báscula: {ex.Message}");
+                throw;
+            }
+            finally
+            {
+                socket?.Close();
+            }
+        }
+
+
+
+        public async Task EscucharBasculaAsync(string deviceName, Action<string> alRecibirPeso, CancellationToken cancellationToken)
+        {
+            BluetoothAdapter adapter = BluetoothAdapter.DefaultAdapter;
+            if (adapter == null) return;
+
+            BluetoothDevice device = adapter.BondedDevices.FirstOrDefault(d => d.Name == deviceName);
+            if (device == null) return;
+
+            BluetoothSocket socket = null;
+            try
+            {
+                Java.Util.UUID uuid = Java.Util.UUID.FromString("00001101-0000-1000-8000-00805F9B34FB");
+                socket = device.CreateRfcommSocketToServiceRecord(uuid);
+                await socket.ConnectAsync();
+
+                if (socket.IsConnected)
+                {
+                    byte[] buffer = new byte[1024];
+
+                    // Este ciclo se repite infinitamente MIENTRAS no cancelemos la tarea
+                    while (!cancellationToken.IsCancellationRequested)
+                    {
+                        if (socket.InputStream.IsDataAvailable())
+                        {
+                            int bytesRead = await socket.InputStream.ReadAsync(buffer, 0, buffer.Length);
+                            string data = Encoding.ASCII.GetString(buffer, 0, bytesRead);
+
+                            // Enviamos los datos crudos de vuelta a la pantalla
+                            alRecibirPeso?.Invoke(data);
+                        }
+
+                        // Una pequeñísima pausa para no saturar el procesador del teléfono
+                        await Task.Delay(150, cancellationToken);
+                    }
+                }
+            }
+            catch (TaskCanceledException)
+            {
+                // Esto es normal, ocurre cuando cerramos el popup y cancelamos el ciclo. Se ignora.
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error en lectura continua: {ex.Message}");
+            }
+            finally
+            {
+                // Cuando el ciclo se rompe (porque se cerró el popup), cerramos la conexión educadamente
+                socket?.Close();
+            }
+        }
+
+
+
+
         //public async Task PrintBytesAsync(string deviceName, byte[] data)
         //{
         //    BluetoothAdapter adapter = BluetoothAdapter.DefaultAdapter;

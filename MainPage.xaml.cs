@@ -85,7 +85,7 @@
 
         private async void mnuCatalogo(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new CatalogosPage());
+            await Navigation.PushAsync(new ProductosPage());
         }
 
 

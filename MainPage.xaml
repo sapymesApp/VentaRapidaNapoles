@@ -81,7 +81,7 @@
                         Tapped="mnuVentas" />
 
                         <controls:MenuButton 
-                        ButtonText="Catálogos" 
+                        ButtonText="Inventario" 
                         CardBackgroundColor="#E0F2FE" 
                         PrimaryColor="#0284C7" 
                         IconGlyph="&#xe02f;" 

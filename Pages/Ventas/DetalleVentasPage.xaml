@@ -118,7 +118,7 @@
                         CardBackgroundColor="#F0F9FF" 
                         PrimaryColor="#0284C7" 
                         IconGlyph="&#xf2c0;" 
-                        Tapped="OnAbonarClicked" />
+                        Tapped="btnReimprimir_Tapped" />
 
                         <controls:MenuButton 
                         Grid.Column="1"

@@ -118,7 +118,7 @@ public partial class NuevaVentasPage : ContentPage
         var productCard = (MauiApp6.Controls.ProductCard)sender;
         var producto = (Producto)productCard.BindingContext;
 
-        var popup = new CantidadPopup(producto.Descripcion, producto.Precio1, producto.Precio2, producto.Precio3, producto.Precio4);
+        var popup = new CantidadPopup(producto.Descripcion, producto.esGranel, producto.Precio1, producto.Precio2, producto.Precio3, producto.Precio4);
         var popupResult = await this.ShowPopupAsync(popup);
 
         if (popupResult is CantidadPrecioResult result)

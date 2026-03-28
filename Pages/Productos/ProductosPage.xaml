@@ -4,11 +4,21 @@
              NavigationPage.HasNavigationBar="False"
              xmlns:controls="clr-namespace:MauiApp6.Controls" 
              x:Class="MauiApp6.ProductosPage">
-    <Grid RowDefinitions="*, Auto" BackgroundColor="#F3F4F6">
+    <Grid RowDefinitions="Auto, *, Auto" BackgroundColor="#F3F4F6">
+
+        <SearchBar x:Name="SbhProductos" 
+                   Grid.Row="0"
+                   Placeholder="Buscar por descripción..."
+                   PlaceholderColor="#9CA3AF"
+                   TextColor="#111827"
+                   BackgroundColor="White"
+                   Margin="15,10,15,0"
+                   TextChanged="OnSearchTextChanged">
+        </SearchBar>
 
         <CollectionView x:Name="CvProductos"
                     SelectionMode="Single"
-                    Grid.Row="0">
+                    Grid.Row="1">
 
             <CollectionView.Header>
                 <VerticalStackLayout Padding="20,20,20,10">
@@ -52,8 +62,7 @@
                                     <TapGestureRecognizer NumberOfTapsRequired="2" />
                                 </Border.GestureRecognizers>
 
-                                <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="15">
-
+                                <Grid ColumnDefinitions="Auto, *, Auto, Auto, Auto" ColumnSpacing="20">
                                     <Border Grid.Column="0" WidthRequest="46" HeightRequest="46" BackgroundColor="#F0F9FF" StrokeThickness="0" VerticalOptions="Center">
                                         <Border.StrokeShape>
                                             <RoundRectangle CornerRadius="23" />
@@ -61,14 +70,32 @@
                                         <Image Source="{Binding ImgSource}" Aspect="AspectFill" HorizontalOptions="Fill" VerticalOptions="Fill"/>
                                     </Border>
 
-                                    <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
+                                    <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="4">
                                         <Label Text="{Binding Descripcion}" FontAttributes="Bold" FontSize="15" TextColor="#111827" LineBreakMode="TailTruncation" MaxLines="2"/>
-                                        <Label Text="{Binding Id, StringFormat='Código: {0}'}" FontSize="12" TextColor="#6B7280"/>
+                                        <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
+                                            <Label Text="{Binding Codigo, StringFormat='Código: {0}'}" FontSize="12" TextColor="#6B7280"/>
+                                            <Border IsVisible="{Binding esGranel}" BackgroundColor="#FEF3C7" StrokeThickness="0" Padding="6,2" VerticalOptions="Center">
+                                                <Border.StrokeShape>
+                                                    <RoundRectangle CornerRadius="4" />
+                                                </Border.StrokeShape>
+                                                <Label Text="A GRANEL" FontSize="9" FontAttributes="Bold" TextColor="#D97706" VerticalOptions="Center"/>
+                                            </Border>
+                                        </HorizontalStackLayout>
                                     </VerticalStackLayout>
 
-                                    <VerticalStackLayout Grid.Column="2" VerticalOptions="Center" HorizontalOptions="End">
-                                        <Label Text="Precio" FontSize="10" TextColor="#9CA3AF" HorizontalOptions="End" />
-                                        <Label Text="{Binding Precio1, StringFormat='{0:C}'}" FontAttributes="Bold" FontSize="16" TextColor="#059669" HorizontalOptions="End"/>
+                                    <VerticalStackLayout Grid.Column="2" VerticalOptions="Center" HorizontalOptions="Center" Spacing="0">
+                                        <Label Text="P1" FontSize="10" FontAttributes="Bold" TextColor="#9CA3AF" HorizontalOptions="Center" />
+                                        <Label Text="{Binding Precio1, StringFormat='{0:C}'}" FontAttributes="Bold" FontSize="15" TextColor="#059669" HorizontalOptions="Center"/>
+                                    </VerticalStackLayout>
+
+                                    <VerticalStackLayout Grid.Column="3" VerticalOptions="Center" HorizontalOptions="Center" Spacing="0">
+                                        <Label Text="P2" FontSize="10" FontAttributes="Bold" TextColor="#9CA3AF" HorizontalOptions="Center" />
+                                        <Label Text="{Binding Precio2, StringFormat='{0:C}'}" FontSize="13" TextColor="#059669" HorizontalOptions="Center"/>
+                                    </VerticalStackLayout>
+
+                                    <VerticalStackLayout Grid.Column="4" VerticalOptions="Center" HorizontalOptions="Center" Spacing="0">
+                                        <Label Text="P3" FontSize="10" FontAttributes="Bold" TextColor="#9CA3AF" HorizontalOptions="Center" />
+                                        <Label Text="{Binding Precio3, StringFormat='{0:C}'}" FontSize="13" TextColor="#059669" HorizontalOptions="Center"/>
                                     </VerticalStackLayout>
                                 </Grid>
 

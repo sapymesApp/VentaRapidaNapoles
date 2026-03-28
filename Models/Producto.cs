@@ -29,8 +29,9 @@ namespace MauiApp6.Models
         
         public decimal Precio4 { get; set; } // O Costo
 
-
         public decimal Costo { get; set; } // O Costo
+
+        public bool esGranel { get; set; } = false;
 
         public string ImagenBase64 { get; set; }
 

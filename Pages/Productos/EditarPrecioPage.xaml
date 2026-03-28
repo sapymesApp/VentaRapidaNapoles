@@ -75,7 +75,7 @@
                         </VerticalStackLayout>
 
                         <VerticalStackLayout Spacing="8">
-                            <Label Text="Precio de venta" FontSize="14" FontAttributes="Bold" TextColor="#4B5563" />
+                            <Label Text="Precio de venta 1" FontSize="14" FontAttributes="Bold" TextColor="#4B5563" />
 
                             <Border Stroke="#E5E7EB" StrokeThickness="1" BackgroundColor="#F9FAFB" Padding="15,0,5,0">
                                 <Border.StrokeShape>
@@ -86,6 +86,78 @@
                                     <Label Grid.Column="0" Text="$" FontSize="18" FontAttributes="Bold" TextColor="#9CA3AF" VerticalOptions="Center" Margin="0,0,5,0"/>
 
                                     <Entry x:Name="TxtPrecio" 
+                                       Grid.Column="1"
+                                       Keyboard="Numeric" 
+                                       FontSize="18"
+                                       TextColor="#111827"
+                                       Placeholder="0.00"
+                                       PlaceholderColor="#9CA3AF"
+                                       ReturnType="Next"
+                                       BackgroundColor="Transparent"/>
+                                </Grid>
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Spacing="8">
+                            <Label Text="Precio de venta 2" FontSize="14" FontAttributes="Bold" TextColor="#4B5563" />
+
+                            <Border Stroke="#E5E7EB" StrokeThickness="1" BackgroundColor="#F9FAFB" Padding="15,0,5,0">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="8" />
+                                </Border.StrokeShape>
+
+                                <Grid ColumnDefinitions="Auto, *">
+                                    <Label Grid.Column="0" Text="$" FontSize="18" FontAttributes="Bold" TextColor="#9CA3AF" VerticalOptions="Center" Margin="0,0,5,0"/>
+
+                                    <Entry x:Name="TxtPrecio2" 
+                                       Grid.Column="1"
+                                       Keyboard="Numeric" 
+                                       FontSize="18"
+                                       TextColor="#111827"
+                                       Placeholder="0.00"
+                                       PlaceholderColor="#9CA3AF"
+                                       ReturnType="Next"
+                                       BackgroundColor="Transparent"/>
+                                </Grid>
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Spacing="8">
+                            <Label Text="Precio de venta 3" FontSize="14" FontAttributes="Bold" TextColor="#4B5563" />
+
+                            <Border Stroke="#E5E7EB" StrokeThickness="1" BackgroundColor="#F9FAFB" Padding="15,0,5,0">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="8" />
+                                </Border.StrokeShape>
+
+                                <Grid ColumnDefinitions="Auto, *">
+                                    <Label Grid.Column="0" Text="$" FontSize="18" FontAttributes="Bold" TextColor="#9CA3AF" VerticalOptions="Center" Margin="0,0,5,0"/>
+
+                                    <Entry x:Name="TxtPrecio3" 
+                                       Grid.Column="1"
+                                       Keyboard="Numeric" 
+                                       FontSize="18"
+                                       TextColor="#111827"
+                                       Placeholder="0.00"
+                                       PlaceholderColor="#9CA3AF"
+                                       ReturnType="Next"
+                                       BackgroundColor="Transparent"/>
+                                </Grid>
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Spacing="8">
+                            <Label Text="Precio de venta 4" FontSize="14" FontAttributes="Bold" TextColor="#4B5563" />
+
+                            <Border Stroke="#E5E7EB" StrokeThickness="1" BackgroundColor="#F9FAFB" Padding="15,0,5,0">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="8" />
+                                </Border.StrokeShape>
+
+                                <Grid ColumnDefinitions="Auto, *">
+                                    <Label Grid.Column="0" Text="$" FontSize="18" FontAttributes="Bold" TextColor="#9CA3AF" VerticalOptions="Center" Margin="0,0,5,0"/>
+
+                                    <Entry x:Name="TxtPrecio4" 
                                        Grid.Column="1"
                                        Keyboard="Numeric" 
                                        FontSize="18"
