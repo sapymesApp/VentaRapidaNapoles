@@ -49,6 +49,14 @@
                         SelectedIndexChanged="OnDevicePickerSelectedIndexChanged"/>
                         </Border>
 
+                        <VerticalStackLayout Spacing="8">
+                            <Label Text="Tamaño de papel" FontSize="14" FontAttributes="Bold" TextColor="#4B5563" />
+                            <HorizontalStackLayout Spacing="20">
+                                <RadioButton x:Name="Rb80mm" Content="80 mm" IsChecked="True" CheckedChanged="OnPaperSizeChanged" />
+                                <RadioButton x:Name="Rb58mm" Content="58 mm" CheckedChanged="OnPaperSizeChanged" />
+                            </HorizontalStackLayout>
+                        </VerticalStackLayout>
+
                         <controls:MenuButton 
                         ButtonText="Imprimir prueba" 
                         CardBackgroundColor="#FFFBEB" 

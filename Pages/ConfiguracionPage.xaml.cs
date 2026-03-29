@@ -28,6 +28,12 @@ public partial class ConfiguracionPage : ContentPage
         // 2. Pausa de medio segundo para que Android tenga lista la 'Activity'
         await Task.Delay(500);
 
+        string tamanoGuardado = Preferences.Default.Get("TamanoPapel", "80mm");
+        if (tamanoGuardado == "58mm")
+            Rb58mm.IsChecked = true;
+        else
+            Rb80mm.IsChecked = true;
+
         txtEmpresa.Text= Preferences.Default.Get("EMPRESA","");
 
         txtID.Text = ObtenerIdDispositivo();
@@ -120,6 +126,18 @@ public partial class ConfiguracionPage : ContentPage
 
             // Guardamos el nombre de la impresora en la memoria del teléfono
             Preferences.Default.Set("ImpresoraGuardada", impresoraSeleccionada);
+        }
+    }
+
+    private void OnPaperSizeChanged(object sender, CheckedChangedEventArgs e)
+    {
+        if (Rb58mm != null && Rb58mm.IsChecked)
+        {
+            Preferences.Default.Set("TamanoPapel", "58mm");
+        }
+        else if (Rb80mm != null && Rb80mm.IsChecked)
+        {
+            Preferences.Default.Set("TamanoPapel", "80mm");
         }
     }
 

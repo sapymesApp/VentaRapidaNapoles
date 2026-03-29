@@ -9,18 +9,70 @@ public partial class NuevaVentasPage : ContentPage
 
 
     private readonly ServicioImpresionTickets _servicioImpresion;
+    private readonly ServicioImpresionTickets58mm _servicioImpresion58mm;
     private int _ventasIdActual = 0;
     private bool _hayCambiosSinGuardar = false;
-    public int VentaNumero { get; set; } = 1;
+    private int _ventaNumero = 1;
+    public int VentaNumero 
+    { 
+        get => _ventaNumero; 
+        set 
+        { 
+            _ventaNumero = value;
+            ActualizarColoresVenta();
+        } 
+    }
+
+    private Color ObtenerColorPrimario()
+    {
+        return _ventaNumero switch
+        {
+            1 => Color.FromArgb("#10B981"),
+            2 => Color.FromArgb("#F59E0B"),
+            3 => Color.FromArgb("#3B82F6"),
+            _ => Color.FromArgb("#10B981")
+        };
+    }
+
+    private void ActualizarColoresVenta()
+    {
+        if (BtnRegistrarVenta == null) return;
+
+        var colorPrimario = ObtenerColorPrimario();
+        BtnRegistrarVenta.PrimaryColor = colorPrimario;
+
+        switch (_ventaNumero)
+        {
+            case 1:
+                BtnRegistrarVenta.CardBackgroundColor = Color.FromArgb("#F0FFF4");
+                break;
+            case 2:
+                BtnRegistrarVenta.CardBackgroundColor = Color.FromArgb("#FFFBEB");
+                break;
+            case 3:
+                BtnRegistrarVenta.CardBackgroundColor = Color.FromArgb("#EFF6FF");
+                break;
+        }
+
+        if (ContenedorCatalogo.IsVisible)
+        {
+            TabCatalogo.BackgroundColor = colorPrimario;
+        }
+        else
+        {
+            TabCarrito.BackgroundColor = colorPrimario;
+        }
+    }
     List<Producto> ProductosLista;
     List<Producto> CarritoLista = new List<Producto>();
 
 
-    public NuevaVentasPage(ServicioImpresionTickets servicioImpresion)
+    public NuevaVentasPage(ServicioImpresionTickets servicioImpresion, ServicioImpresionTickets58mm servicioImpresion58mm)
 	{
 		InitializeComponent();
         CargarCatalogo();
         _servicioImpresion = servicioImpresion;
+        _servicioImpresion58mm = servicioImpresion58mm;
     }
 
 
@@ -150,7 +202,7 @@ public partial class NuevaVentasPage : ContentPage
 
     private void OnTabCatalogoTapped(object sender, EventArgs e)
     {
-        TabCatalogo.BackgroundColor = Color.FromArgb("#0D9488");
+        TabCatalogo.BackgroundColor = ObtenerColorPrimario();
         LblTabCatalogo.TextColor = Colors.White;
         
         TabCarrito.BackgroundColor = Color.FromArgb("#F3F4F6");
@@ -162,7 +214,7 @@ public partial class NuevaVentasPage : ContentPage
 
     private void OnTabCarritoTapped(object sender, EventArgs e)
     {
-        TabCarrito.BackgroundColor = Color.FromArgb("#0D9488");
+        TabCarrito.BackgroundColor = ObtenerColorPrimario();
         LblTabCarrito.TextColor = Colors.White;
         
         TabCatalogo.BackgroundColor = Color.FromArgb("#F3F4F6");
@@ -388,12 +440,24 @@ public partial class NuevaVentasPage : ContentPage
                     Precio = item.PrecioVenta
                 }).ToList();
 
-                // Llamamos a nuestra clase reutilizable
-                await _servicioImpresion.ImprimirTicketAsync(
-                    printerName,
-                    ventas,
-                    clienteSeleccionado,
-                    detallesImpresion);
+                string tamanoPapel = Preferences.Default.Get("TamanoPapel", "80mm");
+
+                if (tamanoPapel == "58mm")
+                {
+                    await _servicioImpresion58mm.ImprimirTicketAsync(
+                        printerName,
+                        ventas,
+                        clienteSeleccionado,
+                        detallesImpresion);
+                }
+                else
+                {
+                    await _servicioImpresion.ImprimirTicketAsync(
+                        printerName,
+                        ventas,
+                        clienteSeleccionado,
+                        detallesImpresion);
+                }
             }
             else
             {

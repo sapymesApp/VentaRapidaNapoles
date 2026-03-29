@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Maui;
+using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
 using QuestPDF.Infrastructure;
 using SkiaSharp.Views.Maui.Controls.Hosting;
@@ -30,6 +30,7 @@ namespace MauiApp6
 
 
             builder.Services.AddSingleton<ServicioImpresionTickets>();
+            builder.Services.AddSingleton<ServicioImpresionTickets58mm>();
             builder.Services.AddTransient<NuevaVentasPage>();
             builder.Services.AddTransient<ConfiguracionPage>();
 

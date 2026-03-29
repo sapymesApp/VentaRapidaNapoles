@@ -1,27 +1,27 @@
-﻿using MauiApp6.Models;
+using MauiApp6.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Maui.Storage;
 
 namespace MauiApp6.Services
 {
-    public class ServicioImpresionTickets
+    public class ServicioImpresionTickets58mm
     {
         private readonly IBluetoothService _bluetoothService;
 
-        // Inyectamos el servicio Bluetooth que ya construimos
-        public ServicioImpresionTickets(IBluetoothService bluetoothService)
+        // Inyectamos el servicio Bluetooth
+        public ServicioImpresionTickets58mm(IBluetoothService bluetoothService)
         {
             _bluetoothService = bluetoothService;
         }
 
-
         public async Task ImprimirTicketAsync(string nombreImpresora, Ventas venta, Clientes cliente, List<VentasDetalle> detalles,
-            //string nombreEmpresa = "MI TIENDA APP",
             string ubicacion = "Mesones #221, Agropecuario, CP 20116\nAguacalientes, Ags.")
-            {
+        {
             if (string.IsNullOrEmpty(nombreImpresora))
                 throw new Exception("No se especificó una impresora válida.");
 
@@ -33,8 +33,6 @@ namespace MauiApp6.Services
             // 1. Inicializar
             printData.AddRange(EscPosCommands.Initialize);
 
-
-
             try
             {
                 string rutaLogo = Preferences.Default.Get("RutaLogoTicket", string.Empty);
@@ -42,19 +40,12 @@ namespace MauiApp6.Services
                 // Verificamos que el archivo físico exista en esa ruta
                 if (File.Exists(rutaLogo))
                 {
-                    // Leemos TODOS los bytes del archivo directamente al arreglo en una sola línea
                     byte[] imageBytes = File.ReadAllBytes(rutaLogo);
-
-                    // Pasamos los bytes a tu formateador de la impresora
                     byte[] printerLogo = _bluetoothService.FormatImageForPrinter(imageBytes);
 
                     printData.AddRange(EscPosCommands.AlignCenter);
                     printData.AddRange(printerLogo);
                     printData.AddRange(EscPosCommands.FeedLine);
-                }
-                else
-                {
-                    System.Diagnostics.Debug.WriteLine($"El archivo físico no se encontró en: {rutaLogo}");
                 }
             }
             catch (Exception ex)
@@ -62,14 +53,7 @@ namespace MauiApp6.Services
                 System.Diagnostics.Debug.WriteLine($"Error al preparar logo para imprimir: {ex.Message}");
             }
 
-
-
             // 3. Encabezado
-            //printData.AddRange(EscPosCommands.AlignCenter);
-            //printData.AddRange(EscPosCommands.SizeDouble);
-            //printData.AddRange(EscPosCommands.BoldOn);
-            //printData.AddRange(Encoding.ASCII.GetBytes($"{nombreEmpresa}\n"));
-
             printData.AddRange(EscPosCommands.BoldOff);
             printData.AddRange(EscPosCommands.SizeNormal);
             printData.AddRange(Encoding.ASCII.GetBytes($"{ubicacion}\n"));
@@ -87,22 +71,21 @@ namespace MauiApp6.Services
             printData.AddRange(EscPosCommands.FeedLine);
 
             // 5. Partidas (Detalle)
-            // Extendemos la línea a 48 guiones para impresoras de 80mm
-            printData.AddRange(Encoding.ASCII.GetBytes("----------------------------------------------\n"));
-
-            // Acomodamos los encabezados (Cant, Descripcion, Precio, Importe)
-            printData.AddRange(Encoding.ASCII.GetBytes("Cant    Descripcion          Precio    Importe\n"));
-            printData.AddRange(Encoding.ASCII.GetBytes("----------------------------------------------\n"));
+            // Para impresoras de 58mm el ancho es de 32 caracteres (aprox)
+            printData.AddRange(Encoding.ASCII.GetBytes("--------------------------------\n"));
+            // Encabezados adaptados: Cantidad, Descripción e Importe Total
+            printData.AddRange(Encoding.ASCII.GetBytes("Cant Descripcion         Importe\n"));
+            printData.AddRange(Encoding.ASCII.GetBytes("--------------------------------\n"));
 
             foreach (var item in detalles)
             {
                 decimal importe = (decimal)(item.Cantidad * item.Precio);
 
-                // ¡Ojo aquí! Le pasamos también el 'item.Precio' a tu método
-                string lineaFormateada = FormatearLineaTicket(item.Cantidad, item.Descripcion, item.Precio, importe);
+                // Usamos el método optimizado para 58mm que recibe solo 3 parámetros
+                string lineaFormateada = FormatearLineaTicket(item.Cantidad, item.Descripcion, importe);
                 printData.AddRange(Encoding.ASCII.GetBytes(lineaFormateada));
             }
-            printData.AddRange(Encoding.ASCII.GetBytes("----------------------------------------------\n"));
+            printData.AddRange(Encoding.ASCII.GetBytes("--------------------------------\n"));
 
             // 6. Totales
             printData.AddRange(EscPosCommands.AlignRight);
@@ -124,35 +107,31 @@ namespace MauiApp6.Services
             await _bluetoothService.PrintBytesAsync(nombreImpresora, printData.ToArray());
         }
 
-
-
-        public string FormatearLineaTicket(decimal cantidad, string descripcion, decimal precio, decimal importe)
+        public string FormatearLineaTicket(decimal cantidad, string descripcion, decimal importe)
         {
-            int anchoTotal = 46; // Ancho estándar para 80mm
+            int anchoTotal = 32; // Ancho estándar para 58mm
 
-            string cantStr = cantidad.ToString("0.##").PadLeft(6);
-            string precioStr = precio.ToString("C2").PadLeft(12);
-            string importeStr = importe.ToString("C2").PadLeft(10);
+            string cantStr = cantidad.ToString("0.##").PadLeft(4);
+            string importeStr = importe.ToString("C2").PadLeft(9); // Un poco más de espacio por si son números grandes
 
-            // Ajuste matemático: restamos 5 espacios huecos en total
-            int anchoDesc = anchoTotal - cantStr.Length - precioStr.Length - importeStr.Length - 5;
+            // Calcula el espacio para descripción: total - cantidad - importe - 2 espacios separadores
+            int anchoDesc = anchoTotal - cantStr.Length - importeStr.Length - 2;
 
             string descStr = descripcion;
 
             if (descStr.Length > anchoDesc)
             {
+                // Cortar si es más largo que el espacio
                 descStr = descStr.Substring(0, anchoDesc);
             }
             else
             {
+                // Rellenar con espacios si es más corto
                 descStr = descStr.PadRight(anchoDesc);
             }
 
-            // Armamos la línea final con 3 espacios de separación iniciales
-            return $"{cantStr}   {descStr} {precioStr} {importeStr}\n";
+            // Armamos la línea final con los 2 espacios de separación entre columnas
+            return $"{cantStr} {descStr} {importeStr}\n";
         }
-
-
-
     }
 }
