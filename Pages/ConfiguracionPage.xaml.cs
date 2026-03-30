@@ -34,7 +34,15 @@ public partial class ConfiguracionPage : ContentPage
         else
             Rb80mm.IsChecked = true;
 
+        string vistaGuardada = Preferences.Default.Get("VistaCatalogo", "Grid");
+        if (vistaGuardada == "Lista")
+            RbVistaLista.IsChecked = true;
+        else
+            RbVistaGrid.IsChecked = true;
+
         txtEmpresa.Text= Preferences.Default.Get("EMPRESA","");
+        txtTituloTicket.Text = Preferences.Default.Get("TicketTitulo", "MI TIENDA APP");
+        txtDireccionTicket.Text = Preferences.Default.Get("TicketDireccion", "Tonalá, Jalisco");
 
         txtID.Text = ObtenerIdDispositivo();
         // 3. Ahora sí, llamamos a la función que pide los permisos
@@ -141,6 +149,30 @@ public partial class ConfiguracionPage : ContentPage
         }
     }
 
+    private void OnVistaCatalogoChanged(object sender, CheckedChangedEventArgs e)
+    {
+        if (RbVistaLista != null && RbVistaLista.IsChecked)
+        {
+            Preferences.Default.Set("VistaCatalogo", "Lista");
+        }
+        else if (RbVistaGrid != null && RbVistaGrid.IsChecked)
+        {
+            Preferences.Default.Set("VistaCatalogo", "Grid");
+        }
+    }
+
+    private void OnDatosTicketChanged(object sender, TextChangedEventArgs e)
+    {
+        if (sender == txtTituloTicket)
+        {
+            Preferences.Default.Set("TicketTitulo", txtTituloTicket.Text ?? string.Empty);
+        }
+        else if (sender == txtDireccionTicket)
+        {
+            Preferences.Default.Set("TicketDireccion", txtDireccionTicket.Text ?? string.Empty);
+        }
+    }
+
 
     //private void OnBluetoothDeviceSelected(object sender, EventArgs e)
     //{
@@ -201,12 +233,14 @@ public partial class ConfiguracionPage : ContentPage
         printData.AddRange(EscPosCommands.AlignCenter);
         printData.AddRange(EscPosCommands.SizeDouble);
         printData.AddRange(EscPosCommands.BoldOn);
-        printData.AddRange(Encoding.ASCII.GetBytes("MI TIENDA APP\n"));
+        string tituloTicket = Preferences.Default.Get("TicketTitulo", "MI TIENDA APP");
+        printData.AddRange(Encoding.ASCII.GetBytes($"{tituloTicket}\n"));
 
         // Desactivar negritas y volver a tamaño normal para subtítulo
         printData.AddRange(EscPosCommands.BoldOff);
         printData.AddRange(EscPosCommands.SizeNormal);
-        printData.AddRange(Encoding.ASCII.GetBytes("Tonalá, Jalisco\n"));
+        string direccionTicket = Preferences.Default.Get("TicketDireccion", "Tonalá, Jalisco");
+        printData.AddRange(Encoding.ASCII.GetBytes($"{direccionTicket}\n"));
         printData.AddRange(Encoding.ASCII.GetBytes("Tel: 555-1234\n"));
         printData.AddRange(EscPosCommands.FeedLine); // Espacio
 

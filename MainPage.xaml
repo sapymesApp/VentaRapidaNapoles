@@ -36,7 +36,7 @@
     </ContentPage.Resources>
 
 
-    <Grid RowDefinitions="Auto, *, Auto" BackgroundColor="#F3F4F6">
+    <Grid RowDefinitions="Auto, Auto, *, Auto" BackgroundColor="#F3F4F6">
 
         <Border Grid.Row="0" BackgroundColor="#0284C7" StrokeThickness="0" Padding="20,40,20,70" Margin="0,0,0,-50" ZIndex="0">
             <Border.StrokeShape>
@@ -49,19 +49,19 @@
             </VerticalStackLayout>
         </Border>
 
-        <ScrollView Grid.Row="1" ZIndex="1">
-            <VerticalStackLayout Spacing="25" Padding="20,0,20,30">
+        <Border Grid.Row="1" WidthRequest="150" HeightRequest="150" BackgroundColor="#0A1929" Stroke="White" StrokeThickness="4" HorizontalOptions="Center" ZIndex="2">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="30" />
+            </Border.StrokeShape>
+            <Border.Shadow>
+                <Shadow Brush="Black" Offset="0,8" Radius="15" Opacity="0.15" />
+            </Border.Shadow>
 
-                <Border WidthRequest="150" HeightRequest="150" BackgroundColor="#0A1929" Stroke="White" StrokeThickness="4" HorizontalOptions="Center">
-                    <Border.StrokeShape>
-                        <RoundRectangle CornerRadius="30" />
-                    </Border.StrokeShape>
-                    <Border.Shadow>
-                        <Shadow Brush="Black" Offset="0,8" Radius="15" Opacity="0.15" />
-                    </Border.Shadow>
+            <Image x:Name="imgLogo" Aspect="AspectFill" BackgroundColor="#E0F2FE" />
+        </Border>
 
-                    <Image x:Name="imgLogo" Aspect="AspectFill" BackgroundColor="#E0F2FE" />
-                </Border>
+        <ScrollView Grid.Row="2" ZIndex="1">
+            <VerticalStackLayout Padding="20,25,20,30">
 
                 <Border BackgroundColor="White" StrokeThickness="0" Padding="20,25">
                     <Border.StrokeShape>
@@ -116,7 +116,7 @@
             </VerticalStackLayout>
         </ScrollView>
 
-        <controls:FooterLogo Grid.Row="2" Margin="0,10,0,20" />
+        <controls:FooterLogo Grid.Row="3" Margin="0,10,0,20" />
 
     </Grid>
 </ContentPage>

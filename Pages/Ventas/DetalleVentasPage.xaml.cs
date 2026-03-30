@@ -7,7 +7,8 @@ using QuestPDF.Previewer;
 using System.IO;
 using IContainer = QuestPDF.Infrastructure.IContainer;
 using CommunityToolkit.Maui.Alerts; // Para crear el Toast
-using CommunityToolkit.Maui.Core;   // Para definir la duraci�n (Corta/Larga)
+using CommunityToolkit.Maui.Core;
+using MauiApp6.Services;   // Para definir la duraci�n (Corta/Larga)
 
 
 
@@ -426,38 +427,60 @@ public partial class DetalleVentasPage : ContentPage
             string printerName = Preferences.Default.Get("ImpresoraGuardada", string.Empty);
             if (!string.IsNullOrEmpty(printerName))
             {
-                // Obtenemos el servicio de impresión desde el contenedor de dependencias de MAUI
-                var servicioImpresion = this.Handler?.MauiContext?.Services.GetService<MauiApp6.Services.ServicioImpresionTickets>();
-                if (servicioImpresion == null)
-                    servicioImpresion = Application.Current?.MainPage?.Handler?.MauiContext?.Services.GetService<MauiApp6.Services.ServicioImpresionTickets>();
+                // Obtenemos el cliente correspondiente a la venta
+                var clientes = await App.Database.GetClientesAsync();
+                var clienteSeleccionado = clientes.FirstOrDefault(c => c.IdCliente == _ventas.idCliente);
+                
+                // Obtenemos los detalles de la venta
+                var detalles = await App.Database.GetDetallesByVentasIdAsync(_ventas.Id);
 
-                if (servicioImpresion != null)
+                // Formateamos los detalles para que coincidan con la firma de impresión
+                var detallesImpresion = detalles.Select(item => new VentasDetalle
                 {
-                    // Obtenemos el cliente correspondiente a la venta
-                    var clientes = await App.Database.GetClientesAsync();
-                    var clienteSeleccionado = clientes.FirstOrDefault(c => c.IdCliente == _ventas.idCliente);
-                    
-                    // Obtenemos los detalles de la venta
-                    var detalles = await App.Database.GetDetallesByVentasIdAsync(_ventas.Id);
+                    Descripcion = item.Descripcion,
+                    Cantidad = item.Cantidad,
+                    Precio = item.Precio
+                }).ToList();
 
-                    // Formateamos los detalles para que coincidan con la firma de impresión
-                    var detallesImpresion = detalles.Select(item => new VentasDetalle
+                string tamanoPapel = Preferences.Default.Get("TamanoPapel", "80mm");
+
+                if (tamanoPapel == "58mm")
+                {
+                    var servicioImpresion58mm = this.Handler?.MauiContext?.Services.GetService<MauiApp6.Services.ServicioImpresionTickets58mm>();
+                    if (servicioImpresion58mm == null)
+                        servicioImpresion58mm = Application.Current?.MainPage?.Handler?.MauiContext?.Services.GetService<MauiApp6.Services.ServicioImpresionTickets58mm>();
+
+                    if (servicioImpresion58mm != null)
                     {
-                        Descripcion = item.Descripcion,
-                        Cantidad = item.Cantidad,
-                        Precio = item.Precio
-                    }).ToList();
-
-                    // Imprimimos el ticket
-                    await servicioImpresion.ImprimirTicketAsync(
-                        printerName,
-                        _ventas,
-                        clienteSeleccionado,
-                        detallesImpresion);
+                        await servicioImpresion58mm.ImprimirTicketAsync(
+                            printerName,
+                            _ventas,
+                            clienteSeleccionado,
+                            detallesImpresion);
+                    }
+                    else
+                    {
+                        await DisplayAlert("Error", "No se pudo iniciar el servicio de impresión de 58mm.", "OK");
+                    }
                 }
                 else
                 {
-                    await DisplayAlert("Error", "No se pudo iniciar el servicio de impresión.", "OK");
+                    var servicioImpresion = this.Handler?.MauiContext?.Services.GetService<MauiApp6.Services.ServicioImpresionTickets>();
+                    if (servicioImpresion == null)
+                        servicioImpresion = Application.Current?.MainPage?.Handler?.MauiContext?.Services.GetService<MauiApp6.Services.ServicioImpresionTickets>();
+
+                    if (servicioImpresion != null)
+                    {
+                        await servicioImpresion.ImprimirTicketAsync(
+                            printerName,
+                            _ventas,
+                            clienteSeleccionado,
+                            detallesImpresion);
+                    }
+                    else
+                    {
+                        await DisplayAlert("Error", "No se pudo iniciar el servicio de impresión de 80mm.", "OK");
+                    }
                 }
             }
             else

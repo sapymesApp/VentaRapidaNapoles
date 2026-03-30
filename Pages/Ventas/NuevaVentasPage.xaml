@@ -49,22 +49,51 @@
                     </Border>
                 </Border>
 
-                <CollectionView Grid.Row="1" x:Name="CvProductos" SelectionMode="None">
-                    <CollectionView.ItemsLayout>
-                        <GridItemsLayout Orientation="Vertical" Span="4" HorizontalItemSpacing="10" VerticalItemSpacing="10" />
-                    </CollectionView.ItemsLayout>
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <controls:ProductCard Tapped="OnProductoTapped" />
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                    <CollectionView.EmptyView>
-                        <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="10" Margin="0,80">
-                            <Label Text="&#xe8b6;" FontFamily="MaterialIcons" FontSize="80" TextColor="#D1D5DB" HorizontalOptions="Center"/>
-                            <Label Text="No se encontraron productos" FontSize="16" FontAttributes="Bold" TextColor="#4B5563" HorizontalOptions="Center"/>
-                        </VerticalStackLayout>
-                    </CollectionView.EmptyView>
-                </CollectionView>
+                <Grid Grid.Row="1">
+                    <CollectionView x:Name="CvProductosGrid" SelectionMode="None">
+                        <CollectionView.ItemsLayout>
+                            <GridItemsLayout Orientation="Vertical" Span="4" HorizontalItemSpacing="10" VerticalItemSpacing="10" />
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <controls:ProductCard Tapped="OnProductoTapped" />
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                        <CollectionView.EmptyView>
+                            <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="10" Margin="0,80">
+                                <Label Text="&#xe8b6;" FontFamily="MaterialIcons" FontSize="80" TextColor="#D1D5DB" HorizontalOptions="Center"/>
+                                <Label Text="No se encontraron productos" FontSize="16" FontAttributes="Bold" TextColor="#4B5563" HorizontalOptions="Center"/>
+                            </VerticalStackLayout>
+                        </CollectionView.EmptyView>
+                    </CollectionView>
+
+                    <CollectionView x:Name="CvProductosLista" SelectionMode="None" IsVisible="False">
+                        <CollectionView.ItemsLayout>
+                            <LinearItemsLayout Orientation="Vertical" ItemSpacing="8" />
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Border BackgroundColor="White" Stroke="#E5E7EB" StrokeThickness="1" Margin="2,0,2,0" Padding="15" StrokeShape="RoundRectangle 8">
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="OnProductoListaTapped"/>
+                                    </Border.GestureRecognizers>
+                                    <Grid ColumnDefinitions="*, Auto" VerticalOptions="Center">
+                                        <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                            <Label Text="{Binding Descripcion}" FontSize="15" FontAttributes="Bold" TextColor="#111827" />
+                                            <Label Text="{Binding PrecioVenta, StringFormat='Precio: {0:C}'}" FontSize="13" TextColor="#6B7280" />
+                                        </VerticalStackLayout>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                        <CollectionView.EmptyView>
+                            <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="10" Margin="0,80">
+                                <Label Text="&#xe8b6;" FontFamily="MaterialIcons" FontSize="80" TextColor="#D1D5DB" HorizontalOptions="Center"/>
+                                <Label Text="No se encontraron productos" FontSize="16" FontAttributes="Bold" TextColor="#4B5563" HorizontalOptions="Center"/>
+                            </VerticalStackLayout>
+                        </CollectionView.EmptyView>
+                    </CollectionView>
+                </Grid>
             </Grid>
 
             <!-- PESTAÑA 2: CARRITO -->

@@ -19,8 +19,7 @@ namespace MauiApp6.Services
             _bluetoothService = bluetoothService;
         }
 
-        public async Task ImprimirTicketAsync(string nombreImpresora, Ventas venta, Clientes cliente, List<VentasDetalle> detalles,
-            string ubicacion = "Mesones #221, Agropecuario, CP 20116\nAguacalientes, Ags.")
+        public async Task ImprimirTicketAsync(string nombreImpresora, Ventas venta, Clientes cliente, List<VentasDetalle> detalles)
         {
             if (string.IsNullOrEmpty(nombreImpresora))
                 throw new Exception("No se especificó una impresora válida.");
@@ -53,21 +52,46 @@ namespace MauiApp6.Services
                 System.Diagnostics.Debug.WriteLine($"Error al preparar logo para imprimir: {ex.Message}");
             }
 
-            // 3. Encabezado
-            printData.AddRange(EscPosCommands.BoldOff);
-            printData.AddRange(EscPosCommands.SizeNormal);
-            printData.AddRange(Encoding.ASCII.GetBytes($"{ubicacion}\n"));
-            printData.AddRange(EscPosCommands.FeedLine);
+
+            string Titulo = Preferences.Get("TicketTitulo", "");
+
+            if (!string.IsNullOrEmpty(Titulo))
+            {
+                printData.AddRange(EscPosCommands.AlignCenter);
+                printData.AddRange(EscPosCommands.SizeDouble);
+                printData.AddRange(EscPosCommands.BoldOn);
+                printData.AddRange(Encoding.ASCII.GetBytes($"{Titulo}\n"));
+                printData.AddRange(EscPosCommands.BoldOff);
+                printData.AddRange(EscPosCommands.SizeNormal);
+            }
+
+
+            string ubicacion = Preferences.Get("TicketDireccion", "");
+
+            if (!String.IsNullOrEmpty(ubicacion))
+            {
+                printData.AddRange(EscPosCommands.BoldOff);
+                printData.AddRange(EscPosCommands.SizeNormal);
+                printData.AddRange(Encoding.ASCII.GetBytes($"{ubicacion}\n"));
+                printData.AddRange(EscPosCommands.FeedLine);
+            }
+
+
+            //// 3. Encabezado
+            //printData.AddRange(EscPosCommands.BoldOff);
+            //printData.AddRange(EscPosCommands.SizeNormal);
+            //printData.AddRange(Encoding.ASCII.GetBytes($"{ubicacion}\n"));
+            //printData.AddRange(EscPosCommands.FeedLine);
 
             // 4. Datos del Cliente / Folio
             printData.AddRange(EscPosCommands.AlignLeft);
             printData.AddRange(Encoding.ASCII.GetBytes($"Folio: {venta.Id}\n"));
             printData.AddRange(Encoding.ASCII.GetBytes($"Fecha: {venta.Fecha:dd/MM/yyyy HH:mm}\n"));
 
-            if (cliente != null)
-            {
-                printData.AddRange(Encoding.ASCII.GetBytes($"Cliente: {cliente.Nombre}\n"));
-            }
+            //if (cliente != null)
+            //{
+            //    printData.AddRange(Encoding.ASCII.GetBytes($"Cliente: {cliente.Nombre}\n"));
+            //}
             printData.AddRange(EscPosCommands.FeedLine);
 
             // 5. Partidas (Detalle)

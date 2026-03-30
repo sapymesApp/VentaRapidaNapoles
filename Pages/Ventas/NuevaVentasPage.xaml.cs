@@ -75,6 +75,23 @@ public partial class NuevaVentasPage : ContentPage
         _servicioImpresion58mm = servicioImpresion58mm;
     }
 
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+
+        string vistaGuardada = Preferences.Default.Get("VistaCatalogo", "Grid");
+        if (vistaGuardada == "Lista")
+        {
+            CvProductosGrid.IsVisible = false;
+            CvProductosLista.IsVisible = true;
+        }
+        else
+        {
+            CvProductosGrid.IsVisible = true;
+            CvProductosLista.IsVisible = false;
+        }
+    }
+
 
 
 
@@ -136,7 +153,8 @@ public partial class NuevaVentasPage : ContentPage
 
 
  
-        CvProductos.ItemsSource = ProductosLista;
+        CvProductosGrid.ItemsSource = ProductosLista;
+        CvProductosLista.ItemsSource = ProductosLista;
         CvCarrito.ItemsSource = CarritoLista;
         CalcularTotal();
     }
@@ -149,7 +167,8 @@ public partial class NuevaVentasPage : ContentPage
         if (string.IsNullOrWhiteSpace(filtro))
         {
             // Si borró todo, regresamos a la lista original completa
-            CvProductos.ItemsSource = ProductosLista;
+            CvProductosGrid.ItemsSource = ProductosLista;
+            CvProductosLista.ItemsSource = ProductosLista;
         }
         else
         {
@@ -159,17 +178,33 @@ public partial class NuevaVentasPage : ContentPage
                 .Where(p => p.Descripcion.ToLower().Contains(filtro))
                 .ToList();
 
-            CvProductos.ItemsSource = resultadosFiltrados;
+            CvProductosGrid.ItemsSource = resultadosFiltrados;
+            CvProductosLista.ItemsSource = resultadosFiltrados;
         }
     }
 
 
 
-    private async void OnProductoTapped(object sender, EventArgs e)
+    private void OnProductoTapped(object sender, EventArgs e)
     {
         var productCard = (MauiApp6.Controls.ProductCard)sender;
-        var producto = (Producto)productCard.BindingContext;
+        if (productCard.BindingContext is Producto producto)
+        {
+            ProcesarSeleccionProducto(producto);
+        }
+    }
 
+    private void OnProductoListaTapped(object sender, EventArgs e)
+    {
+        var border = (Microsoft.Maui.Controls.Border)sender;
+        if (border.BindingContext is Producto producto)
+        {
+            ProcesarSeleccionProducto(producto);
+        }
+    }
+
+    private async void ProcesarSeleccionProducto(Producto producto)
+    {
         var popup = new CantidadPopup(producto.Descripcion, producto.esGranel, producto.Precio1, producto.Precio2, producto.Precio3, producto.Precio4);
         var popupResult = await this.ShowPopupAsync(popup);
 

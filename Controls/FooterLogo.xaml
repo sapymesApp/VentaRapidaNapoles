@@ -2,7 +2,7 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MauiApp6.Controls.FooterLogo">
-    <VerticalStackLayout Padding="20,10,20,20" 
+    <VerticalStackLayout Padding="20,0,20,5" 
                          HorizontalOptions="Center" 
                          VerticalOptions="End">
 
